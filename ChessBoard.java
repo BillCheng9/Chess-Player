@@ -83,55 +83,18 @@ public class ChessBoard {
     public long getBK() {
         return BK;
     }
-    public static void drawArray(long WP, long WN, long WB, long WR, long WQ, long WK,
-                                 long BP, long BN, long BB, long BR, long BQ, long BK) {
-        String chessBoard[][] = new String[8][8];
+    public static void drawArray(long bitboard) {
+        int chessBoard[][] = new int[8][8];
         for (int i = 0; i < 64; i++) {
-            chessBoard[7 - i / 8][i % 8] = " "; // Reverse the rank
+            chessBoard[7 - i / 8][i % 8] = 0;
         }
         for (int i = 0; i < 64; i++) {
-            if (((WP >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "P";
-            }
-            if (((WN >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "N";
-            }
-            if (((WB >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "B";
-            }
-            if (((WR >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "R";
-            }
-            if (((WQ >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "Q";
-            }
-            if (((WK >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "K";
-            }
-            if (((BP >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "p";
-            }
-            if (((BN >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "n";
-            }
-            if (((BB >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "b";
-            }
-            if (((BR >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "r";
-            }
-            if (((BQ >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "q";
-            }
-            if (((BK >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = "k";
+            if (((bitboard >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][i % 8] = 1;
             }
         }
         for (int i = 0; i < 8; i++) {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
-    }
-    public void drawBoard() {
-        ChessBoard.drawArray(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
     }
 }
