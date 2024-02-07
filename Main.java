@@ -16,8 +16,15 @@ public class Main {
         long BQ = chessBoard.getBQ();
         long BK = chessBoard.getBK();
 
-        long allwhite = WP|WN|WB|WR|WQ|WK;
-        
-        chessBoard.drawArray(allwhite);
+        long allWhite = WP|WN|WB|WR|WQ|WK;
+        long allBlack = BP|BN|BB|BR|BQ|BK;
+
+        long allBoard = allWhite|allBlack;
+
+        chessBoard.drawArray(allWhite);
+        System.out.println();
+        chessBoard.drawArray(allBlack);
+        System.out.println();
+        chessBoard.drawArray(allBoard);
     }
 }
