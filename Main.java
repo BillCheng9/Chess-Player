@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        String board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/R1BQKBNR w KQkq - 0 1";
         ChessBoard chessBoard = new ChessBoard(board);
 
         long WP = chessBoard.getWP();
@@ -18,6 +18,10 @@ public class Main {
 
         long allwhite = WP|WN|WB|WR|WQ|WK;
         
-        chessBoard.drawArray(allwhite);
+        long WNM = (WN << 6 | WN << 10 | WN << 15 | WN << 17 | WN >> 6 | WN >> 10) & (~allwhite);
+
+        chessBoard.drawArray(WN);
+        System.out.println("");
+        chessBoard.drawArray(WNM);
     }
 }
