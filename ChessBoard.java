@@ -17,7 +17,7 @@ public class ChessBoard {
                 rank--;
                 file = 0;
             } else {
-                long square = 1L << (rank * 8 + file);
+                long square = 1L << (rank * 8 + (7 - file));
                 switch (c) {
                     case 'P' -> WP |= square;
                     case 'N' -> WN |= square;
@@ -84,13 +84,13 @@ public class ChessBoard {
         return BK;
     }
     public static void drawArray(long bitboard) {
-        int chessBoard[][] = new int[8][8];
+        int[][] chessBoard = new int[8][8];
         for (int i = 0; i < 64; i++) {
-            chessBoard[7 - i / 8][i % 8] = 0;
+            chessBoard[7 - i / 8][7 - i % 8] = 0;
         }
         for (int i = 0; i < 64; i++) {
             if (((bitboard >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][i % 8] = 1;
+                chessBoard[7 - i / 8][7 - i % 8] = 1;
             }
         }
         for (int i = 0; i < 8; i++) {
