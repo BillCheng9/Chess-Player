@@ -16,13 +16,24 @@ public class Main {
         long BQ = chessBoard.getBQ();
         long BK = chessBoard.getBK();
 
-        long allwhite = WP|WN|WB|WR|WQ|WK;
-        long allblack = BP|BN|BB|BR|BQ|BK;
-        
-        long WNM = (WN << 6 | WN << 10 | WN << 15 | WN << 17 | WN >> 6 | WN >> 10) & (~allwhite);
+        long w = WP|WN|WB|WR|WQ|WK;
+        long b = BP|BN|BB|BR|BQ|BK;
+        long m = Long.highestOneBit(WN);
+        long km = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w);
+
+        long WKM = Move.getWKnightMoves(WN, w);
 
         ChessBoard.drawArray(WN);
         System.out.println("");
-        ChessBoard.drawArray(WNM);
+        ChessBoard.drawArray(WKM);
+        System.out.println("");
+        ChessBoard.drawArray(m);
+        System.out.println("");
+        ChessBoard.drawArray(km);
+        System.out.println("");
+
+        System.out.print(Integer.valueOf(Long.numberOfTrailingZeros(m))%8);
+        System.out.println("");
+        System.out.print(Long.toBinaryString(m));
     }
 }
