@@ -18,4 +18,25 @@ public class Move {
         }
         return km;
     }
+
+    public long getWPawnMoves(long wPawns, long wPieces, long bPieces){
+        long pawnMoves = 0L;
+        long fPawnMoves;
+        while (wPawns != 0L){
+            long pawn = Long.highestOneBit(wPawns);
+            long singleStep = pawn << 8 & (~wPieces) & (~bPieces); // shift pawn up a rank
+            long doubleStep = singleStep << 8 & (~wPieces) & (~bPieces); // shift pawn up two ranks
+            long capture = (pawn << 7 | pawn << 9) & (bPieces); // shift pawn up diagonally as long as there is a black piece
+            if (pawn <= 32768) { // if pawn is located on first rank
+                fPawnMoves = singleStep | doubleStep | capture;
+            }
+            else {
+                fPawnMoves = singleStep | capture;
+            }
+
+            pawnMoves |= fPawnMoves;
+            wPawns = (~pawn) & wPawns;
+        }
+        return pawnMoves;
+    }
 }
