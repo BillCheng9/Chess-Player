@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/R1BQKB1R w KQkq - 0 1";
+        String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1";
         ChessBoard chessBoard = new ChessBoard(board);
 
         long WP = chessBoard.getWP();
@@ -37,7 +37,7 @@ public class Main {
         System.out.print(Long.toBinaryString(m));
 
         // test pawn move generation
-        String pawnTestBoard = "rnbqkbnr/pppppppp/8/8/8/3N3n/PPPPPPP1/RKBQKBR w KQkq - 0 1";
+        String pawnTestBoard = "rnbkqb1r/8/8/8/8/3N3n/PPPPPPP1/RNBKQB1R w KQkq - 0 1";
         ChessBoard chessBoardPawnTest = new ChessBoard(pawnTestBoard);
 
         long pawnTestWP = chessBoardPawnTest.getWP();
@@ -62,5 +62,13 @@ public class Main {
         Move move = new Move();
         long WPM = move.getWPawnMoves(pawnTestWP, wPawnTest, bPawnTest);
         ChessBoard.drawArray(WPM);
+
+        System.out.println("");
+        System.out.println("------ Test evaluation function ------");
+        System.out.println("Should be 0, because all pieces are on the board");
+        System.out.println(chessBoard.evaluateWhite());
+        System.out.println("Should be 7, because white is up by 7 pawns");
+        System.out.println(chessBoardPawnTest.evaluateWhite());
+
     }
 }

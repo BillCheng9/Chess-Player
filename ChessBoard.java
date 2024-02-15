@@ -97,4 +97,39 @@ public class ChessBoard {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
     }
+
+    /**
+     * Helper for evaluation function - counts number of pieces in a bitboard
+     * @return pieceCount
+     */
+    public int countPieces(long bitboard){
+        int pieceCount = 0;
+        while (bitboard != 0L){
+            long piece = Long.highestOneBit(bitboard); // get a piece
+            bitboard = (~piece) & bitboard; // take piece off of bitboard
+            pieceCount++;
+        }
+        return pieceCount;
+    }
+
+    /**
+     * Basic evaluation function that only looks at material
+     * @return materialDiff - difference in material, white - black
+     */
+    public int evaluateWhite(){
+        int blackMaterial =
+                (countPieces(this.BB) * 3) +
+                (countPieces(this.BN) * 3) +
+                (countPieces(this.BR) * 5) +
+                (countPieces(this.BQ) * 9) +
+                (countPieces(this.BP));
+        int whiteMaterial =
+                (countPieces(this.WB) * 3) +
+                (countPieces(this.WN) * 3) +
+                (countPieces(this.WR) * 5) +
+                (countPieces(this.WQ) * 9) +
+                (countPieces(this.WP));
+        int materialDiff = whiteMaterial - blackMaterial;
+        return materialDiff;
+    }
 }
