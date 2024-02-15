@@ -19,17 +19,17 @@ public class Main {
         long w = WP|WN|WB|WR|WQ|WK;
         long b = BP|BN|BB|BR|BQ|BK;
         long m = Long.highestOneBit(WN);
-        long km = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w);
+        long nm = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w);
 
-        long WKM = Move.getWKnightMoves(WN, w);
+        long WNM = Move.getWKnightMoves(WN, w);
 
         ChessBoard.drawArray(WN);
         System.out.println("");
-        ChessBoard.drawArray(WKM);
+        ChessBoard.drawArray(WNM);
         System.out.println("");
         ChessBoard.drawArray(m);
         System.out.println("");
-        ChessBoard.drawArray(km);
+        ChessBoard.drawArray(nm);
         System.out.println("");
 
         System.out.print(Integer.valueOf(Long.numberOfTrailingZeros(m))%8);
