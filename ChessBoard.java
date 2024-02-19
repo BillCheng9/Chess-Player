@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import static java.lang.Long.bitCount;
+
 public class ChessBoard {
     private long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
     ChessBoard(String fen){
@@ -99,36 +101,22 @@ public class ChessBoard {
     }
 
     /**
-     * Helper for evaluation function - counts number of pieces in a bitboard
-     * @return pieceCount
-     */
-    public int countPieces(long bitboard){
-        int pieceCount = 0;
-        while (bitboard != 0L){
-            long piece = Long.highestOneBit(bitboard); // get a piece
-            bitboard = (~piece) & bitboard; // take piece off of bitboard
-            pieceCount++;
-        }
-        return pieceCount;
-    }
-
-    /**
      * Basic evaluation function that only looks at material
      * @return materialDiff - difference in material, white - black
      */
     public int evaluateWhite(){
         int blackMaterial =
-                (countPieces(this.BB) * 3) +
-                (countPieces(this.BN) * 3) +
-                (countPieces(this.BR) * 5) +
-                (countPieces(this.BQ) * 9) +
-                (countPieces(this.BP));
+                (bitCount(this.BB) * 3) +
+                (bitCount(this.BN) * 3) +
+                (bitCount(this.BR) * 5) +
+                (bitCount(this.BQ) * 9) +
+                (bitCount(this.BP));
         int whiteMaterial =
-                (countPieces(this.WB) * 3) +
-                (countPieces(this.WN) * 3) +
-                (countPieces(this.WR) * 5) +
-                (countPieces(this.WQ) * 9) +
-                (countPieces(this.WP));
+                (bitCount(this.WB) * 3) +
+                (bitCount(this.WN) * 3) +
+                (bitCount(this.WR) * 5) +
+                (bitCount(this.WQ) * 9) +
+                (bitCount(this.WP));
         int materialDiff = whiteMaterial - blackMaterial;
         return materialDiff;
     }
