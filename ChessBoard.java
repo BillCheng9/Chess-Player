@@ -38,6 +38,20 @@ public class ChessBoard {
             }
         }
     }
+    public static void drawArray(long bitboard) {
+        int[][] chessBoard = new int[8][8];
+        for (int i = 0; i < 64; i++) {
+            chessBoard[7 - i / 8][7 - i % 8] = 0;
+        }
+        for (int i = 0; i < 64; i++) {
+            if (((bitboard >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = 1;
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            System.out.println(Arrays.toString(chessBoard[i]));
+        }
+    }
     public long getWP() {
         return WP;
     }
@@ -85,20 +99,7 @@ public class ChessBoard {
     public long getBK() {
         return BK;
     }
-    public static void drawArray(long bitboard) {
-        int[][] chessBoard = new int[8][8];
-        for (int i = 0; i < 64; i++) {
-            chessBoard[7 - i / 8][7 - i % 8] = 0;
-        }
-        for (int i = 0; i < 64; i++) {
-            if (((bitboard >> i) & 1) == 1) {
-                chessBoard[7 - i / 8][7 - i % 8] = 1;
-            }
-        }
-        for (int i = 0; i < 8; i++) {
-            System.out.println(Arrays.toString(chessBoard[i]));
-        }
-    }
+
 
     /**
      * Basic evaluation function that only looks at material
