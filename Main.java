@@ -1,5 +1,6 @@
 public class Main {
     public static void main(String[] args) {
+        System.out.println("\n" + "------ Test Knight moves ------" + "\n");
         String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1";
         ChessBoard chessBoard = new ChessBoard(board);
 
@@ -18,8 +19,6 @@ public class Main {
 
         long w = WP|WN|WB|WR|WQ|WK;
         long b = BP|BN|BB|BR|BQ|BK;
-        long m = Long.highestOneBit(WN);
-        long nm = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w);
 
         long WNM = Move.getWKnightMoves(WN, w);
 
@@ -27,14 +26,6 @@ public class Main {
         System.out.println("");
         ChessBoard.drawArray(WNM);
         System.out.println("");
-        ChessBoard.drawArray(m);
-        System.out.println("");
-        ChessBoard.drawArray(nm);
-        System.out.println("");
-
-        System.out.print(Integer.valueOf(Long.numberOfTrailingZeros(m))%8);
-        System.out.println("");
-        System.out.print(Long.toBinaryString(m));
 
         // test pawn move generation
         String pawnTestBoard = "rnbkqb1r/8/8/8/8/3N3n/PPPPPPP1/RNBKQB1R w KQkq - 0 1";
@@ -69,6 +60,60 @@ public class Main {
         System.out.println(chessBoard.evaluateWhite());
         System.out.println("Should be 7, because white is up by 7 pawns");
         System.out.println(chessBoardPawnTest.evaluateWhite());
+
+        System.out.println("-------Test King moves-------" + "\n");
+        String kboard = "rnbqkbnr/pppppppp/8/8/3N4/8/8/4K3 w KQkq - 0 1";
+        ChessBoard kchessBoard = new ChessBoard(kboard);
+        long KWP = kchessBoard.getWP();
+        long KWN = kchessBoard.getWN();
+        long KWB = kchessBoard.getWB();
+        long KWR = kchessBoard.getWR();
+        long KWQ = kchessBoard.getWQ();
+        long KWK = kchessBoard.getWK();
+        long KBP = kchessBoard.getBP();
+        long KBN = kchessBoard.getBN();
+        long KBB = kchessBoard.getBB();
+        long KBR = kchessBoard.getBR();
+        long KBQ = kchessBoard.getBQ();
+        long KBK = kchessBoard.getBK();
+
+        long wKTest = KWB | KWR | KWP | KWN | KWQ | KWK;
+        long bKTest = KBP | KBN | KBB | KBR | KBQ | KBK;
+
+        System.out.println("White king position");
+        kchessBoard.drawArray(KWK);
+        System.out.println("White king moves");
+        long WKkM = Move.getWKingMoves(KWK, wKTest);
+        kchessBoard.drawArray(WKkM);
+
+        System.out.println("-------Test Bishop moves-------" + "\n");
+        String bboard = "rnbqkbnr/pppppppp/8/3B4/8/8/PPPPPPPP/8 w KQkq - 0 1";
+        ChessBoard bchessBoard = new ChessBoard(bboard);
+        long BWP = bchessBoard.getWP();
+        long BWN = bchessBoard.getWN();
+        long BWB = bchessBoard.getWB();
+        long BWR = bchessBoard.getWR();
+        long BWQ = bchessBoard.getWQ();
+        long BWK = bchessBoard.getWK();
+        long BBP = bchessBoard.getBP();
+        long BBN = bchessBoard.getBN();
+        long BBB = bchessBoard.getBB();
+        long BBR = bchessBoard.getBR();
+        long BBQ = bchessBoard.getBQ();
+        long BBK = bchessBoard.getBK();
+
+        long wBTest = BWB | BWR | BWP | BWN | BWQ | BWK;
+        long bBTest = BBP | BBN | BBB | BBR | BBQ | BBK;
+
+        System.out.println("White bishop");
+        bchessBoard.drawArray(BWB);
+        System.out.println("White pieces");
+        bchessBoard.drawArray(wBTest);
+        System.out.println("Black pieces");
+        bchessBoard.drawArray(bBTest);
+        System.out.println("White bishop moves");
+        long WBbm = Move.getWBishopMoves(BWB, wBTest,bBTest);
+        bchessBoard.drawArray(WBbm);
 
     }
 }
