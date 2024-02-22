@@ -109,12 +109,8 @@ public class Move {
     }
     public static Long getWQueenMoves(long q,long wo, long bo) {
         long qm = 0L;
-        while(q!=0L){
-            long m = Long.highestOneBit(q);
-            long fqm = getWRookMoves(q, wo, bo) | getWBishopMoves(q,wo, bo);
-            qm |= fqm;
-            q = (~m) & q;
-        }
+        long fqm = getWRookMoves(q, wo, bo) | getWBishopMoves(q,wo, bo);
+        qm |= fqm;
         return qm;
     }
 }
