@@ -81,10 +81,10 @@ public class Main {
         long bKTest = KBP | KBN | KBB | KBR | KBQ | KBK;
 
         System.out.println("White king position");
-        kchessBoard.drawArray(KWK);
+        ChessBoard.drawArray(KWK);
         System.out.println("White king moves");
         long WKkM = Move.getWKingMoves(KWK, wKTest);
-        kchessBoard.drawArray(WKkM);
+        ChessBoard.drawArray(WKkM);
 
         System.out.println("-------Test Bishop moves-------" + "\n");
         String bboard = "rnbqkbnr/pppppppp/8/3B4/4B3/8/PPPPPPPP/8 w KQkq - 0 1";
@@ -106,14 +106,14 @@ public class Main {
         long bBTest = BBP | BBN | BBB | BBR | BBQ | BBK;
 
         System.out.println("White bishop");
-        bchessBoard.drawArray(BWB);
+        ChessBoard.drawArray(BWB);
         System.out.println("White pieces");
-        bchessBoard.drawArray(wBTest);
+        ChessBoard.drawArray(wBTest);
         System.out.println("Black pieces");
-        bchessBoard.drawArray(bBTest);
+        ChessBoard.drawArray(bBTest);
         System.out.println("White bishop moves");
         long WBbm = Move.getWBishopMoves(BWB, wBTest,bBTest);
-        bchessBoard.drawArray(WBbm);
+        ChessBoard.drawArray(WBbm);
 
         System.out.println("-------Test Rook moves-------" + "\n");
         String rboard = "rnbqkbnr/pppppppp/8/1p1R1P2/7R/8/PPPPPPPP/8 w KQkq - 0 1";
@@ -135,14 +135,14 @@ public class Main {
         long bRTest = RBP | RBN | RBB | RBR | RBQ | RBK;
 
         System.out.println("White rook");
-        rchessBoard.drawArray(RWR);
+        ChessBoard.drawArray(RWR);
         System.out.println("White pieces");
-        rchessBoard.drawArray(wRTest);
+        ChessBoard.drawArray(wRTest);
         System.out.println("Black pieces");
-        rchessBoard.drawArray(bRTest);
+        ChessBoard.drawArray(bRTest);
         System.out.println("White Rook moves");
         long WRbm = Move.getWRookMoves(RWR, wRTest,bRTest);
-        rchessBoard.drawArray(WRbm);
+        ChessBoard.drawArray(WRbm);
 
         System.out.println("-------Test Queen moves-------" + "\n");
         String qboard = "rnbqkbnr/pppppppp/8/1p1Q1P2/8/6Q1/PPPPPPPP/8 w KQkq - 0 1";
@@ -164,13 +164,13 @@ public class Main {
         long bQTest = QBP | QBN | QBB | QBR | QBQ | QBK;
 
         System.out.println("White queen");
-        rchessBoard.drawArray(QWQ);
+        ChessBoard.drawArray(QWQ);
         System.out.println("White pieces");
-        rchessBoard.drawArray(wQTest);
+        ChessBoard.drawArray(wQTest);
         System.out.println("Black pieces");
-        rchessBoard.drawArray(bQTest);
+        ChessBoard.drawArray(bQTest);
         System.out.println("White queen moves");
         long WQm = Move.getWQueenMoves(QWQ, wQTest, bQTest);
-        rchessBoard.drawArray(WQm);
+        ChessBoard.drawArray(WQm);
     }
 }
