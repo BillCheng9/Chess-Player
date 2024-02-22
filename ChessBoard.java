@@ -120,4 +120,15 @@ public class ChessBoard {
         int materialDiff = whiteMaterial - blackMaterial;
         return materialDiff;
     }
+
+    /*
+     *
+     * @return attacked - is this square attacked by any of black's pieces?
+
+    public boolean attackedByBlack(long square){
+        long allMoves =
+        return attacked;
+    }
+    */
+
 }

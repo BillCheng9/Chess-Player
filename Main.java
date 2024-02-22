@@ -20,7 +20,7 @@ public class Main {
         long w = WP|WN|WB|WR|WQ|WK;
         long b = BP|BN|BB|BR|BQ|BK;
 
-        long WNM = Move.getWKnightMoves(WN, w);
+        long WNM = Move.getKnightMoves(WN, w);
 
         ChessBoard.drawArray(WN);
         System.out.println("");
@@ -51,7 +51,7 @@ public class Main {
         ChessBoard.drawArray(pawnTestWP);
         System.out.println("");
         Move move = new Move();
-        long WPM = move.getWPawnMoves(pawnTestWP, wPawnTest, bPawnTest);
+        long WPM = move.getPawnMoves(pawnTestWP, wPawnTest, bPawnTest);
         ChessBoard.drawArray(WPM);
 
         System.out.println("");
@@ -83,7 +83,7 @@ public class Main {
         System.out.println("White king position");
         ChessBoard.drawArray(KWK);
         System.out.println("White king moves");
-        long WKkM = Move.getWKingMoves(KWK, wKTest);
+        long WKkM = Move.getKingMoves(KWK, wKTest);
         ChessBoard.drawArray(WKkM);
 
         System.out.println("-------Test Bishop moves-------" + "\n");
@@ -112,7 +112,7 @@ public class Main {
         System.out.println("Black pieces");
         ChessBoard.drawArray(bBTest);
         System.out.println("White bishop moves");
-        long WBbm = Move.getWBishopMoves(BWB, wBTest,bBTest);
+        long WBbm = Move.getBishopMoves(BWB, wBTest,bBTest);
         ChessBoard.drawArray(WBbm);
 
         System.out.println("-------Test Rook moves-------" + "\n");
@@ -141,7 +141,7 @@ public class Main {
         System.out.println("Black pieces");
         ChessBoard.drawArray(bRTest);
         System.out.println("White Rook moves");
-        long WRbm = Move.getWRookMoves(RWR, wRTest,bRTest);
+        long WRbm = Move.getRookMoves(RWR, wRTest,bRTest);
         ChessBoard.drawArray(WRbm);
 
         System.out.println("-------Test Queen moves-------" + "\n");
@@ -170,7 +170,7 @@ public class Main {
         System.out.println("Black pieces");
         ChessBoard.drawArray(bQTest);
         System.out.println("White queen moves");
-        long WQm = Move.getWQueenMoves(QWQ, wQTest, bQTest);
+        long WQm = Move.getQueenMoves(QWQ, wQTest, bQTest);
         ChessBoard.drawArray(WQm);
     }
 }
