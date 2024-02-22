@@ -99,7 +99,7 @@ public class ChessBoard {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
     }
-
+    
     /**
      * Basic evaluation function that only looks at material
      * @return materialDiff - difference in material, white - black

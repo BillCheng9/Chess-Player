@@ -33,7 +33,6 @@ public class Move {
             else {
                 fPawnMoves = singleStep | capture;
             }
-
             pawnMoves |= fPawnMoves;
             wPawns = (~pawn) & wPawns;
         }
