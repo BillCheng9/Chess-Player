@@ -76,8 +76,8 @@ public class Move {
             long m = Long.highestOneBit(b);
             int s = Long.numberOfTrailingZeros(m);
             long o = wo | bo;
-            long possibilitiesDiagonal = (((o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * Long.reverse(b))))&DiagonalMasks8[(s / 8) + (s % 8)];
-            long possibilitiesAntiDiagonal = (((o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * Long.reverse(b))))&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)];
+            long possibilitiesDiagonal = (((o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * m)) ^ Long.reverse(Long.reverse(o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * Long.reverse(m))))&DiagonalMasks8[(s / 8) + (s % 8)];
+            long possibilitiesAntiDiagonal = (((o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * m)) ^ Long.reverse(Long.reverse(o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * Long.reverse(m))))&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)];
             long fbm = (possibilitiesDiagonal)&~wo | (possibilitiesAntiDiagonal)&~wo; // exclude the white pieces
             bm |= fbm;
             b = (~m) & b;
