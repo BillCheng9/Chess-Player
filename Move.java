@@ -14,10 +14,11 @@ public class Move {
                     0x804020100000000L, 0x402010000000000L, 0x201000000000000L, 0x100000000000000L
             };
     public static long getWKnightMoves(long n, long w){
-        long nm = 0L;
+        long nm = 0L; // possible knight moves
         while(n!=0L) {
-            long m = Long.highestOneBit(n);
-            long fnm = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w);
+            long m = Long.highestOneBit(n); // single out one of the knights
+            long fnm = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~w); // get possible knight moves
+            // check if the piece is on the edge
             int n_zero = Long.numberOfTrailingZeros(m);
             if (n_zero%8 < 4) {
                 fnm &= (~w)&(~FILE_AB);
@@ -26,7 +27,7 @@ public class Move {
                 fnm &= (~w)&(~FILE_GH);
             }
             nm |= fnm;
-            n = (~m) & n;
+            n = (~m) & n; // remove the knight
         }
         return nm;
     }
@@ -68,22 +69,18 @@ public class Move {
         }
         return km;
     }
-    static long DAndAntiDMoves(long b,long wo, long bo) {
-        int s = Long.numberOfTrailingZeros(b);
-        long o = wo | bo;
-        long possibilitiesDiagonal = (((o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * Long.reverse(b))))&DiagonalMasks8[(s / 8) + (s % 8)];
-        long possibilitiesAntiDiagonal = (((o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * Long.reverse(b))))&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)];
-        return (possibilitiesDiagonal)&~wo | (possibilitiesAntiDiagonal)&~wo; // exclude the white pieces
-    }
     public static Long getWBishopMoves(long b,long wo, long bo) {
         long bm = 0L;
         while(b!=0L){
             long m = Long.highestOneBit(b);
-            long fbm = DAndAntiDMoves(m, wo, bo);
+            int s = Long.numberOfTrailingZeros(m);
+            long o = wo | bo;
+            long possibilitiesDiagonal = (((o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&DiagonalMasks8[(s / 8) + (s % 8)]) - (2 * Long.reverse(b))))&DiagonalMasks8[(s / 8) + (s % 8)];
+            long possibilitiesAntiDiagonal = (((o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * b)) ^ Long.reverse(Long.reverse(o&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)]) - (2 * Long.reverse(b))))&AntiDiagonalMasks8[(s / 8) + 7 - (s % 8)];
+            long fbm = (possibilitiesDiagonal)&~wo | (possibilitiesAntiDiagonal)&~wo; // exclude the white pieces
             bm |= fbm;
             b = (~m) & b;
         }
         return bm;
     }
-
 }
