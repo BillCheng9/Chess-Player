@@ -8,6 +8,20 @@ public class ChessBoard {
         String[] fenParts = fen.split(" ");
         setBoard(fenParts[0]);
     }
+    ChessBoard(long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK){
+        this.WP = WP;
+        this.WN = WN;
+        this.WB = WB;
+        this.WR = WR;
+        this.WQ = WQ;
+        this.WK = WK;
+        this.BP = BP;
+        this.BN = BN;
+        this.BB = BB;
+        this.BR = BR;
+        this.BQ = BQ;
+        this.BK = BK;
+    }
     public void setBoard(String position){
         int rank = 7;
         int file = 0;
@@ -52,6 +66,30 @@ public class ChessBoard {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
     }
+    public void drawBoard() {
+        String chessBoard[][]=new String[8][8];
+        for (int i=0;i<64;i++) {
+            chessBoard[7 - i / 8][7 - i % 8]=" ";
+        }
+        for (int i=0;i<64;i++) {
+            if (((WP>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="P";}
+            if (((WN>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="N";}
+            if (((WB>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="B";}
+            if (((WR>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="R";}
+            if (((WQ>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="Q";}
+            if (((WK>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="K";}
+            if (((BP>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="p";}
+            if (((BN>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="n";}
+            if (((BB>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="b";}
+            if (((BR>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="r";}
+            if (((BQ>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="q";}
+            if (((BK>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="k";}
+        }
+        for (int i=0;i<8;i++) {
+            System.out.println(Arrays.toString(chessBoard[i]));
+        }
+    }
+
     public long getWP() {
         return WP;
     }
@@ -100,6 +138,7 @@ public class ChessBoard {
         return BK;
     }
 
+
     /**
      * Basic evaluation function that only looks at material
      * @return materialDiff - difference in material, white - black
@@ -107,16 +146,16 @@ public class ChessBoard {
     public int evaluateWhite(){
         int blackMaterial =
                 (bitCount(this.BB) * 3) +
-                (bitCount(this.BN) * 3) +
-                (bitCount(this.BR) * 5) +
-                (bitCount(this.BQ) * 9) +
-                (bitCount(this.BP));
+                        (bitCount(this.BN) * 3) +
+                        (bitCount(this.BR) * 5) +
+                        (bitCount(this.BQ) * 9) +
+                        (bitCount(this.BP));
         int whiteMaterial =
                 (bitCount(this.WB) * 3) +
-                (bitCount(this.WN) * 3) +
-                (bitCount(this.WR) * 5) +
-                (bitCount(this.WQ) * 9) +
-                (bitCount(this.WP));
+                        (bitCount(this.WN) * 3) +
+                        (bitCount(this.WR) * 5) +
+                        (bitCount(this.WQ) * 9) +
+                        (bitCount(this.WP));
         int materialDiff = whiteMaterial - blackMaterial;
         return materialDiff;
     }

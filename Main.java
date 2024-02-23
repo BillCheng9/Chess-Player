@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("\n" + "------ Test Knight moves ------" + "\n");
@@ -172,5 +174,21 @@ public class Main {
         System.out.println("White queen moves");
         long WQm = Move.getQueenMoves(QWQ, wQTest, bQTest);
         ChessBoard.drawArray(WQm);
+
+        System.out.println("\n" + "------ Test Move list ------" + "\n");
+        System.out.println("rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1" + "\n");
+        List<ChessBoard> allMoves = Move.getAllMoves(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+        int length = allMoves.size();
+        System.out.println("Length of the list: " + length); // should be 24
+        chessBoard.drawBoard();
+        System.out.println("");
+        allMoves.get(0).drawBoard();
+        System.out.println("");
+        allMoves.get(1).drawBoard();
+        System.out.println("");
+        allMoves.get(2).drawBoard();
+        System.out.println("");
+        allMoves.get(3).drawBoard();
+        System.out.println("");
     }
 }
