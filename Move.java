@@ -195,255 +195,278 @@ public class Move {
 
         return qm;
     }
-    public static List<ChessBoard> getAllMoves(long wp, long wn, long wb, long wr, long wq, long wk,
-                                               long bp, long bn, long bb, long br, long bq, long bk){
+    public static List<ChessBoard> getAllMoves(ChessBoard chessBoard, boolean whiteToMove) {
         List<ChessBoard> allMoves = new ArrayList<>();
-        Long[] opponentBoard = {bp, bn, bk, br, bb, bq};
-        long wo = wp | wn | wk | wr | wb | wq;
-        long bo = bp | bn | bk | br | bb | bq;
 
-        // get the initial board
-        long initialWP = wp;
-        long initialWN = wn;
-        long initialWB = wb;
-        long initialWR = wr;
-        long initialWQ = wq;
-        long initialWK = wk;
-        long initialBP = bp;
-        long initialBN = bn;
-        long initialBB = bb;
-        long initialBR = br;
-        long initialBQ = bq;
-        long initialBK = bk;
+        long ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing;
+        long opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing;
 
-        // get pawn moves
-        if (initialWP != 0L) {
-            long ip = initialWP;
-            while (ip != 0L) {
-                long m = Long.highestOneBit(ip);
-                long PMoves = getSPawnMoves(ip, wo, bo);
-                while (PMoves != 0L) {
-                    long z = Long.highestOneBit(PMoves);
-                    // check capture
+        if (whiteToMove) {
+            ownPawns = chessBoard.getWP();
+            ownKnights = chessBoard.getWN();
+            ownBishops = chessBoard.getWB();
+            ownRooks = chessBoard.getWR();
+            ownQueens = chessBoard.getWQ();
+            ownKing = chessBoard.getWK();
+
+            opponentPawns = chessBoard.getBP();
+            opponentKnights = chessBoard.getBN();
+            opponentBishops = chessBoard.getBB();
+            opponentRooks = chessBoard.getBR();
+            opponentQueens = chessBoard.getBQ();
+            opponentKing = chessBoard.getBK();
+        } else {
+            ownPawns = chessBoard.getBP();
+            ownKnights = chessBoard.getBN();
+            ownBishops = chessBoard.getBB();
+            ownRooks = chessBoard.getBR();
+            ownQueens = chessBoard.getBQ();
+            ownKing = chessBoard.getBK();
+
+            opponentPawns = chessBoard.getWP();
+            opponentKnights = chessBoard.getWN();
+            opponentBishops = chessBoard.getWB();
+            opponentRooks = chessBoard.getWR();
+            opponentQueens = chessBoard.getWQ();
+            opponentKing = chessBoard.getWK();
+        }
+
+        Long[] opponentBoard = {opponentPawns, opponentKnights, opponentKing, opponentRooks, opponentBishops, opponentQueens};
+        long ownPieces = ownPawns | ownKnights | ownBishops | ownRooks | ownQueens | ownKing;
+        long opponentPieces = opponentPawns | opponentKnights | opponentBishops | opponentRooks | opponentQueens | opponentKing;
+
+        // Save the initial board state
+        long initialOwnPawns = ownPawns;
+        long initialOwnKnights = ownKnights;
+        long initialOwnBishops = ownBishops;
+        long initialOwnRooks = ownRooks;
+        long initialOwnQueens = ownQueens;
+        long initialOwnKing = ownKing;
+
+        // Get pawn moves
+        if (initialOwnPawns != 0L) {
+            long pawns = initialOwnPawns;
+            while (pawns != 0L) {
+                long pawn = Long.highestOneBit(pawns);
+                long pawnMoves = getSPawnMoves(pawn, ownPawns | opponentPawns, ownBishops | opponentBishops | ownQueens | opponentQueens);
+                while (pawnMoves != 0L) {
+                    long move = Long.highestOneBit(pawnMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wp = wp & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wp = initialWP;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    PMoves = (~z) & PMoves;
+                    ownPawns = ownPawns & (~pawn) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownPawns = initialOwnPawns;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    pawnMoves = (~move) & pawnMoves;
                 }
-                ip = (~m) & ip;
+                pawns = (~pawn) & pawns;
             }
         }
 
-        // get knight moves
-        if (initialWN != 0L) {
-            long in = initialWN;
-            while (in != 0L) {
-                long m = Long.highestOneBit(in);
-                long NMoves = getSKnightMoves(in, wo);
-                while (NMoves != 0L) {
-                    long z = Long.highestOneBit(NMoves);
-                    // check capture
+        // Get knight moves
+        if (initialOwnKnights != 0L) {
+            long knights = initialOwnKnights;
+            while (knights != 0L) {
+                long knight = Long.highestOneBit(knights);
+                long knightMoves = getSKnightMoves(knight, ownPawns | opponentPawns);
+                while (knightMoves != 0L) {
+                    long move = Long.highestOneBit(knightMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wn = wn & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wn = initialWN;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    NMoves = (~z) & NMoves;
+                    ownKnights = ownKnights & (~knight) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownKnights = initialOwnKnights;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    knightMoves = (~move) & knightMoves;
                 }
-                in = (~m) & in;
+                knights = (~knight) & knights;
             }
         }
-
-        // get bishop moves
-        if (initialWB != 0L) {
-            long ib = initialWB;
-            while (ib != 0L) {
-                long m = Long.highestOneBit(ib);
-                long BMoves = getSBishopMoves(ib, wo, bo);
-                while (BMoves != 0L) {
-                    long z = Long.highestOneBit(BMoves);
-                    // check capture
+        // Get bishop moves
+        if (initialOwnBishops != 0L) {
+            long bishops = initialOwnBishops;
+            while (bishops != 0L) {
+                long bishop = Long.highestOneBit(bishops);
+                long bishopMoves = getSBishopMoves(bishop, ownPieces, opponentPieces);
+                while (bishopMoves != 0L) {
+                    long move = Long.highestOneBit(bishopMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wb = wb & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wb = initialWB;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    BMoves = (~z) & BMoves;
+                    ownBishops = ownBishops & (~bishop) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownBishops = initialOwnBishops;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    bishopMoves = (~move) & bishopMoves;
                 }
-                ib = (~m) & ib;
+                bishops = (~bishop) & bishops;
             }
         }
 
-        // get rook moves
-        if (initialWR != 0L) {
-            long ir = initialWR;
-            while (ir != 0L) {
-                long m = Long.highestOneBit(ir);
-                long RMoves = getSRookMoves(ir, wo, bo);
-                while (RMoves != 0L) {
-                    long z = Long.highestOneBit(RMoves);
-                    // check capture
+// Get rook moves
+        if (initialOwnRooks != 0L) {
+            long rooks = initialOwnRooks;
+            while (rooks != 0L) {
+                long rook = Long.highestOneBit(rooks);
+                long rookMoves = getSRookMoves(rook, ownPieces, opponentPieces);
+                while (rookMoves != 0L) {
+                    long move = Long.highestOneBit(rookMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wr = wr & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wr = initialWR;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    RMoves = (~z) & RMoves;
+                    ownRooks = ownRooks & (~rook) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownRooks = initialOwnRooks;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    rookMoves = (~move) & rookMoves;
                 }
-                ir = (~m) & ir;
+                rooks = (~rook) & rooks;
             }
         }
-
-        // get queen moves
-        if (initialWQ != 0L) {
-            long iq = initialWQ;
-            while (iq != 0L) {
-                long m = Long.highestOneBit(iq);
-                long QMoves = getSQueenMoves(iq, wo, bo);
-                while (QMoves != 0L) {
-                    long z = Long.highestOneBit(QMoves);
-                    // check capture
+        if (initialOwnQueens != 0L) {
+            long queens = initialOwnQueens;
+            while (queens != 0L) {
+                long queen = Long.highestOneBit(queens);
+                long queenMoves = getSQueenMoves(queen, ownPieces, opponentPieces);
+                while (queenMoves != 0L) {
+                    long move = Long.highestOneBit(queenMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wq = wq & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wq = initialWQ;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    QMoves = (~z) & QMoves;
+                    ownQueens = ownQueens & (~queen) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownQueens = initialOwnQueens;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    queenMoves = (~move) & queenMoves;
                 }
-                iq = (~m) & iq;
+                queens = (~queen) & queens;
             }
         }
 
-        // get king moves
-        if (initialWK != 0L) {
-            long ik = initialWK;
-            while (ik != 0L) {
-                long m = Long.highestOneBit(ik);
-                long KMoves = getSKingMoves(ik, wo);
-                while (KMoves != 0L) {
-                    long z = Long.highestOneBit(KMoves);
-                    // check capture
+// Get king moves
+        if (initialOwnKing != 0L) {
+            long kings = initialOwnKing;
+            while (kings != 0L) {
+                long king = Long.highestOneBit(kings);
+                long kingMoves = getSKingMoves(king, ownPieces);
+                while (kingMoves != 0L) {
+                    long move = Long.highestOneBit(kingMoves);
+                    // Check capture
                     for (int i = 0; i < 6; i++) {
                         long attacked = opponentBoard[i];
-                        if ((z & attacked) != 0L) {
-                            attacked = (~z) & attacked;
+                        if ((move & attacked) != 0L) {
+                            attacked = (~move) & attacked;
                             switch (i) {
-                                case 0 -> bp = attacked;
-                                case 1 -> bn = attacked;
-                                case 2 -> bk = attacked;
-                                case 3 -> br = attacked;
-                                case 4 -> bb = attacked;
-                                case 5 -> bq = attacked;
+                                case 0 -> opponentPawns = attacked;
+                                case 1 -> opponentKnights = attacked;
+                                case 2 -> opponentKing = attacked;
+                                case 3 -> opponentRooks = attacked;
+                                case 4 -> opponentBishops = attacked;
+                                case 5 -> opponentQueens = attacked;
                             }
                         }
                     }
-                    wk = wk & (~m) | z;
-                    allMoves.add(new ChessBoard(wp, wn, wb, wr, wq, wk, bp, bn, bb, br, bq, bk));
-                    wk = initialWK;
-                    bp = initialBP;
-                    bn = initialBN;
-                    bb = initialBB;
-                    br = initialBR;
-                    bq = initialBQ;
-                    bk = initialBK;
-                    KMoves = (~z) & KMoves;
+                    ownKing = ownKing & (~king) | move;
+                    allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
+                    ownKing = initialOwnKing;
+                    opponentPawns = chessBoard.getBP();
+                    opponentKnights = chessBoard.getBN();
+                    opponentBishops = chessBoard.getBB();
+                    opponentRooks = chessBoard.getBR();
+                    opponentQueens = chessBoard.getBQ();
+                    opponentKing = chessBoard.getBK();
+                    kingMoves = (~move) & kingMoves;
                 }
-                ik = (~m) & ik;
+                kings = (~king) & kings;
             }
         }
-
         return allMoves;
     }
 }

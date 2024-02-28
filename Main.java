@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -177,7 +178,7 @@ public class Main {
 
         System.out.println("\n" + "------ Test Move list ------" + "\n");
         System.out.println("rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1" + "\n");
-        List<ChessBoard> allMoves = Move.getAllMoves(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+        List<ChessBoard> allMoves = Move.getAllMoves(chessBoard, true);
         int length = allMoves.size();
         System.out.println("Length of the list: " + length); // should be 24
         chessBoard.drawBoard();
@@ -190,5 +191,44 @@ public class Main {
         System.out.println("");
         allMoves.get(3).drawBoard();
         System.out.println("");
+
+        System.out.println("\n" + "------ Test Minimax ------" + "\n");
+        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        int cutoffDepth = 3;
+        boolean whiteToMove = true;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Current Board:");
+        initialBoard.drawBoard();
+
+        while (!initialBoard.isGameOver()) {
+            ChessBoard nextMove;
+
+            if (whiteToMove) {
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
+            } else {
+                System.out.print("Enter your move (e.g., 'e2e4'): ");
+                String userMove = scanner.nextLine();
+                if (userMove.equals("forfeit")) {
+                    break;
+                }
+                nextMove = initialBoard.performMove(userMove);
+            }
+
+            System.out.println("\n Move:");
+            nextMove.drawBoard();
+
+            initialBoard = nextMove;
+
+            whiteToMove = !whiteToMove;
+        }
+
+        scanner.close();
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins");
+        } else {
+            System.out.println("Game Over. White wins");
+        }
     }
 }
