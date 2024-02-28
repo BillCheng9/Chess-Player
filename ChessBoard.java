@@ -153,20 +153,26 @@ public class ChessBoard {
      * Basic evaluation function that only looks at material
      * @return materialDiff - difference in material, white - black
      */
-    public int evaluateWhite(){
-        int blackMaterial =
+    public int evaluateWhite(boolean whiteToMove){
+        int materialDiff;
+        int opponentMaterial =
                 (bitCount(this.BB) * 3) +
                         (bitCount(this.BN) * 3) +
                         (bitCount(this.BR) * 5) +
                         (bitCount(this.BQ) * 9) +
                         (bitCount(this.BP));
-        int whiteMaterial =
+        int ownMaterial =
                 (bitCount(this.WB) * 3) +
                         (bitCount(this.WN) * 3) +
                         (bitCount(this.WR) * 5) +
                         (bitCount(this.WQ) * 9) +
                         (bitCount(this.WP));
-        int materialDiff = whiteMaterial - blackMaterial;
+        if (whiteToMove) {
+            materialDiff = ownMaterial - opponentMaterial;
+        } else {
+            materialDiff = opponentMaterial - ownMaterial;
+
+        }
         return materialDiff;
     }
 
@@ -175,7 +181,7 @@ public class ChessBoard {
      * @return true if the king is gone; false if it is not
      */
     public boolean isGameOver() {
-        return (WK | BK) == 0L;
+        return (WK == 0L | BK == 0L);
     }
 
     /***
@@ -215,7 +221,7 @@ public class ChessBoard {
             BK |= targetSquare;
         }
         // remove the captured pieces
-        else if ((targetSquare & WP) != 0) {
+        if ((targetSquare & WP) != 0) {
             WP &= ~targetSquare;
         } else if ((targetSquare & WN) != 0) {
             WN &= ~targetSquare;

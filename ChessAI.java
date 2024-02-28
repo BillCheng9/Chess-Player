@@ -9,7 +9,7 @@ public class ChessAI {
         ChessBoard bestMove = null;
         int maxEval = Integer.MIN_VALUE;
         for (ChessBoard move : possibleMoves) {
-            int eval = computeMin(move, 0, INITIAL_ALPHA, INITIAL_BETA, cutoffDepth, !player);
+            int eval = computeMin(move, 1, INITIAL_ALPHA, INITIAL_BETA, cutoffDepth, !player);
             if (eval > maxEval) {
                 maxEval = eval;
                 bestMove = move;
@@ -19,7 +19,7 @@ public class ChessAI {
     }
     private static int computeMax(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
         if (currDepth >= cutoffDepth || board.isGameOver()) {
-            return board.evaluateWhite();
+            return board.evaluateWhite(!player);
         }
 
         int maxEval = Integer.MIN_VALUE;
@@ -30,17 +30,17 @@ public class ChessAI {
             maxEval = Math.max(maxEval, childVal);
             if (childVal > alpha) {
                 alpha = childVal;
-                if (beta <= alpha) {
-                    return (currDepth == 0) ? maxEval : alpha;
-                }
+            }
+            if (beta <= alpha) {
+                break;
             }
         }
 
-        return (currDepth == 0) ? maxEval : alpha;
+        return maxEval;
     }
     private static int computeMin(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
         if (currDepth >= cutoffDepth || board.isGameOver()) {
-            return board.evaluateWhite();
+            return board.evaluateWhite(!player);
         }
 
         int minEval = Integer.MAX_VALUE;
@@ -49,11 +49,11 @@ public class ChessAI {
         for (ChessBoard move : possibleMoves) {
             int childVal = computeMax(move, currDepth + 1, alpha, beta, cutoffDepth, !player);
             minEval = Math.min(minEval, childVal);
-            if (childVal > beta) {
+            if (childVal < beta) {
                 beta = childVal;
-                if (beta <= alpha) {
-                    return beta;
-                }
+            }
+            if (beta <= alpha) {
+                break;
             }
         }
 

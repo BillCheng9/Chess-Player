@@ -60,9 +60,9 @@ public class Main {
         System.out.println("");
         System.out.println("------ Test evaluation function ------");
         System.out.println("Should be 0, because all pieces are on the board");
-        System.out.println(chessBoard.evaluateWhite());
+        System.out.println(chessBoard.evaluateWhite(true));
         System.out.println("Should be 7, because white is up by 7 pawns");
-        System.out.println(chessBoardPawnTest.evaluateWhite());
+        System.out.println(chessBoardPawnTest.evaluateWhite(true));
 
         System.out.println("-------Test King moves-------" + "\n");
         String kboard = "rnbqkbnr/pppppppp/8/8/3N4/8/3P1p2/4K3 w KQkq - 0 1";
@@ -194,20 +194,19 @@ public class Main {
 
         System.out.println("\n" + "------ Test Minimax ------" + "\n");
         ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-        int cutoffDepth = 3;
+        ChessBoard nextMove = initialBoard;
+        int cutoffDepth = 2;
         boolean whiteToMove = true;
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Current Board:");
         initialBoard.drawBoard();
 
-        while (!initialBoard.isGameOver()) {
-            ChessBoard nextMove;
-
+        while (!nextMove.isGameOver()) {
             if (whiteToMove) {
                 nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
             } else {
-                System.out.print("Enter your move (e.g., 'e2e4'): ");
+                System.out.print("Enter your move (e.g., 'e7e5'): ");
                 String userMove = scanner.nextLine();
                 if (userMove.equals("forfeit")) {
                     break;

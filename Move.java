@@ -29,15 +29,7 @@ public class Move {
         long nm = 0L; // possible knight moves
         while(n!=0L) {
             long m = Long.highestOneBit(n); // single out one of the knights
-            long fnm = (m << 6 | m << 10 | m << 15 | m << 17 | m >> 6 | m >> 10) & (~sameOccupied); // get possible knight moves
-            // check if the piece is on the edge
-            int n_zero = Long.numberOfTrailingZeros(m);
-            if (n_zero%8 < 4) {
-                fnm &= (~sameOccupied)&(~FILE_AB);
-            }
-            else {
-                fnm &= (~sameOccupied)&(~FILE_GH);
-            }
+            long fnm = getSKnightMoves(m, sameOccupied);
             nm |= fnm;
             n = (~m) & n; // remove the knight
         }
@@ -49,15 +41,7 @@ public class Move {
         long fPawnMoves;
         while (myPawns != 0L){
             long pawn = Long.highestOneBit(myPawns);
-            long singleStep = pawn << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
-            long doubleStep = singleStep << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
-            long capture = (pawn << 7 | pawn << 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
-            if (pawn <= 32768) { // if pawn is located on first rank
-                fPawnMoves = singleStep | doubleStep | capture;
-            }
-            else {
-                fPawnMoves = singleStep | capture;
-            }
+            fPawnMoves = getSPawnMoves(pawn, sameOccupied, otherOccupied, true);
             pawnMoves |= fPawnMoves;
             myPawns = (~pawn) & myPawns;
         }
@@ -68,14 +52,7 @@ public class Move {
         long km = 0L;
         while(k!=0L){
             long m = Long.highestOneBit(k);
-            long fkm = (m << 1 | m << 7 | m << 8 | m << 9 | m >> 1 | m >> 7 | m >> 8 | m >> 9 );
-            int n_zero = Long.numberOfTrailingZeros(m);
-            if (n_zero % 8 < 4) {
-                fkm &= (~sameOccupied)&(~FILE_AB);
-            }
-            else {
-                fkm &= (~sameOccupied)&(~FILE_GH);
-            }
+            long fkm = getSKingMoves(k, sameOccupied);
             km |= fkm;
             k = (~m) & k;
         }
@@ -85,11 +62,7 @@ public class Move {
         long bm = 0L;
         while(b!=0L){
             long m = Long.highestOneBit(b);
-            int s = Long.numberOfTrailingZeros(m);
-            long o = sameOccupied | otherOccupied;
-            long possibilitiesDiagonal = (((o&DiagonalMasks[(s / 8) + (s % 8)]) - (2 * m)) ^ Long.reverse(Long.reverse(o&DiagonalMasks[(s / 8) + (s % 8)]) - (2 * Long.reverse(m))))&DiagonalMasks[(s / 8) + (s % 8)];
-            long possibilitiesAntiDiagonal = (((o&AntiDiagonalMasks[(s / 8) + 7 - (s % 8)]) - (2 * m)) ^ Long.reverse(Long.reverse(o&AntiDiagonalMasks[(s / 8) + 7 - (s % 8)]) - (2 * Long.reverse(m))))&AntiDiagonalMasks[(s / 8) + 7 - (s % 8)];
-            long fbm = (possibilitiesDiagonal)&~sameOccupied | (possibilitiesAntiDiagonal)&~sameOccupied; // exclude the white pieces
+            long fbm = getSBishopMoves(b, sameOccupied, otherOccupied);
             bm |= fbm;
             b = (~m) & b;
         }
@@ -99,11 +72,7 @@ public class Move {
         long rm = 0L;
         while(r!=0L){
             long m = Long.highestOneBit(r);
-            int s = Long.numberOfTrailingZeros(m);
-            long o = sameOccupied | otherOccupied;
-            long possibilitiesHorizontal = ((o - 2 * m) ^ Long.reverse(Long.reverse(o) - 2 * Long.reverse(m)))&RankMasks[(s / 8)];
-            long possibilitiesVertical = (((o&FileMasks[s % 8]) - (2 * m)) ^ Long.reverse(Long.reverse(o&FileMasks[s % 8]) - (2 * Long.reverse(m))))&FileMasks[(s % 8)];
-            long frm = (possibilitiesHorizontal)&~sameOccupied | (possibilitiesVertical)&~sameOccupied; // exclude the white pieces
+            long frm = getSRookMoves(r, sameOccupied, otherOccupied);
             rm |= frm;
             r = (~m) & r;
         }
@@ -132,20 +101,36 @@ public class Move {
         return nm;
     }
 
-    public static long getSPawnMoves(long wPawns, long sameOccupied, long otherOccupied){
+    public static long getSPawnMoves(long wPawns, long sameOccupied, long otherOccupied, boolean whiteToMove){
         long pawnMoves = 0L;
         long fPawnMoves;
         long pawn = Long.highestOneBit(wPawns);
-        long singleStep = pawn << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
-        long doubleStep = singleStep << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
-        long capture = (pawn << 7 | pawn << 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
-        if (pawn <= 32768) { // if pawn is located on first rank
-            fPawnMoves = singleStep | doubleStep | capture;
+        if (whiteToMove) {
+            long singleStep = pawn << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
+            long doubleStep = singleStep << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
+            long capture = (pawn << 7 | pawn << 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
+            if (pawn <= 32768) { // if pawn is located on first rank
+                fPawnMoves = singleStep | doubleStep | capture;
+            } else {
+                fPawnMoves = singleStep | capture;
+            }
+        } else {
+            long singleStep = pawn >> 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
+            long doubleStep = singleStep >> 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
+            long capture = (pawn >> 7 | pawn >> 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
+            if ((pawn & 0xFF000000000000L) != 0) { // if pawn is located on 7th rank
+                fPawnMoves = singleStep | doubleStep | capture;
+            } else {
+                fPawnMoves = singleStep | capture;
+            }
+        }
+        int n_zero = Long.numberOfTrailingZeros(pawn);
+        if (n_zero%8 < 4) {
+            fPawnMoves &= (~sameOccupied)&(~FILE_AB);
         }
         else {
-            fPawnMoves = singleStep | capture;
+            fPawnMoves &= (~sameOccupied)&(~FILE_GH);
         }
-
         pawnMoves |= fPawnMoves;
 
         return pawnMoves;
@@ -243,12 +228,16 @@ public class Move {
         long initialOwnQueens = ownQueens;
         long initialOwnKing = ownKing;
 
+        // Save the initial board state
+        ChessBoard initialBoard = new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing);
+        chessBoard = initialBoard;
+
         // Get pawn moves
         if (initialOwnPawns != 0L) {
             long pawns = initialOwnPawns;
             while (pawns != 0L) {
                 long pawn = Long.highestOneBit(pawns);
-                long pawnMoves = getSPawnMoves(pawn, ownPawns | opponentPawns, ownBishops | opponentBishops | ownQueens | opponentQueens);
+                long pawnMoves = getSPawnMoves(pawn, ownPieces, opponentPieces, whiteToMove);
                 while (pawnMoves != 0L) {
                     long move = Long.highestOneBit(pawnMoves);
                     // Check capture
@@ -286,7 +275,7 @@ public class Move {
             long knights = initialOwnKnights;
             while (knights != 0L) {
                 long knight = Long.highestOneBit(knights);
-                long knightMoves = getSKnightMoves(knight, ownPawns | opponentPawns);
+                long knightMoves = getSKnightMoves(knight, ownPieces);
                 while (knightMoves != 0L) {
                     long move = Long.highestOneBit(knightMoves);
                     // Check capture
