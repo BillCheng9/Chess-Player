@@ -205,10 +205,11 @@ public class Main {
         allMoves.get(3).drawBoard();
         System.out.println("");
 
-        System.out.println("\n" + "------ Test Minimax ------" + "\n");
-        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1");
+        System.out.println("\n" + "------ Test Search Algorithm ------" + "\n");
+        System.out.println("\n" + "Check if the algorithm knows to capture the rook over the pawn");
+        ChessBoard initialBoard = new ChessBoard("2p1r2k/8/3N4/8/8/8/8/3K4 w KQkq - 0 1");
         ChessBoard nextMove = initialBoard;
-        int cutoffDepth = 4;
+        int cutoffDepth = 6;
         boolean whiteToMove = true;
         Scanner scanner = new Scanner(System.in);
 
@@ -219,7 +220,113 @@ public class Main {
             if (whiteToMove) {
                 nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
             } else {
-                System.out.print("Enter your move (e.g., 'e7e5'): ");
+                System.out.print("Enter your move (e.g., e7e5): ");
+                String userMove = "forfeit";
+                if (userMove.equals("forfeit")) {
+                    break;
+                }
+                nextMove = initialBoard.performMove(userMove);
+            }
+
+            System.out.println("\n Move:");
+            nextMove.drawBoard();
+
+            initialBoard = nextMove;
+
+            whiteToMove = !whiteToMove;
+        }
+
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins.");
+        } else {
+            System.out.println("Game Over. White wins.");
+        }
+
+        System.out.println("\n" + "Check if knight knows to protect the king");
+        initialBoard = new ChessBoard("3rk3/8/8/8/4N3/8/8/3K4 w KQkq - 0 1");
+        nextMove = initialBoard;
+        cutoffDepth = 6;
+        whiteToMove = true;
+
+        System.out.println("Current Board:");
+        initialBoard.drawBoard();
+
+        while (!nextMove.isGameOver()) {
+            if (whiteToMove) {
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
+            } else {
+                System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
+                String userMove = "forfeit"; // just for tests
+                if (userMove.equals("forfeit")) {
+                    break;
+                }
+                nextMove = initialBoard.performMove(userMove);
+            }
+
+            System.out.println("\n Move:");
+            nextMove.drawBoard();
+
+            initialBoard = nextMove;
+
+            whiteToMove = !whiteToMove;
+        }
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins.");
+        } else {
+            System.out.println("Game Over. White wins.");
+        }
+
+        System.out.println("\n" + "Check if knight knows to avoid the pawn attack");
+        initialBoard = new ChessBoard("7k/8/8/8/8/3p4/8/N6K w KQkq - 0 1");
+        nextMove = initialBoard;
+        cutoffDepth = 6;
+        whiteToMove = true;
+
+        System.out.println("Current Board:");
+        initialBoard.drawBoard();
+
+        while (!nextMove.isGameOver()) {
+            if (whiteToMove) {
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
+            } else {
+                System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
+                String userMove = "forfeit"; // just for tests
+                if (userMove.equals("forfeit")) {
+                    break;
+                }
+                nextMove = initialBoard.performMove(userMove);
+            }
+
+            System.out.println("\n Move:");
+            nextMove.drawBoard();
+
+            initialBoard = nextMove;
+
+            whiteToMove = !whiteToMove;
+        }
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins.");
+        } else {
+            System.out.println("Game Over. White wins.");
+        }
+
+        System.out.println("\n" + "A real game.");
+        initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
+        nextMove = initialBoard;
+        cutoffDepth = 6;
+        whiteToMove = true;
+
+        System.out.println("Current Board:");
+        initialBoard.drawBoard();
+
+        while (!nextMove.isGameOver()) {
+            if (whiteToMove) {
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
+            } else {
+                System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
                 String userMove = scanner.nextLine();
                 if (userMove.equals("forfeit")) {
                     break;
@@ -238,9 +345,9 @@ public class Main {
         scanner.close();
 
         if (whiteToMove){
-            System.out.println("Game Over. Black wins");
+            System.out.println("Game Over. Black wins.");
         } else {
-            System.out.println("Game Over. White wins");
+            System.out.println("Game Over. White wins.");
         }
     }
 }

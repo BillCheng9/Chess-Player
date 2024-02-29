@@ -186,7 +186,9 @@ public class ChessBoard {
     }
 
     /***
-     * make the move the user picked
+     * make the move the user picked on a bitboard
+     * (not complete: it does not check if the user input is valid or if the moves is legal for the user)
+     *
      * @return the chess board after the user's move
      */
     public ChessBoard performMove(String move){
@@ -279,13 +281,13 @@ public class ChessBoard {
             other = W;
         }
 
-/* pretend there is friendly piece on the square -
- *  if it can capture the same piece type from black, that black piece is attacking the square
- */
+        /* pretend there is friendly piece on the square -
+        *  if it can capture the same piece type from black, that black piece is attacking the square
+        */
         for (int i = 0; i < 5; i++){
             if (i == 0){
                 if (side == 'b'){
-                if ((Move.getWhitePawnCapture(square, same, other) & otherPawns) != 0L){
+                if ((Move.getWhitePawnCapture(square, other) & otherPawns) != 0L){
                     attacked = true;
                     System.out.println("pawn");
                     break;
