@@ -206,7 +206,7 @@ public class Main {
         System.out.println("");
 
         System.out.println("\n" + "------ Test Search Algorithm ------" + "\n");
-        System.out.println("\n" + "Check if the algorithm knows to capture the rook over the pawn");
+        System.out.println("\n" + "Check if the algorithm captures the rook over the pawn");
         ChessBoard initialBoard = new ChessBoard("2p1r2k/8/3N4/8/8/8/8/3K4 w KQkq - 0 1");
         ChessBoard nextMove = initialBoard;
         int cutoffDepth = 6;
@@ -243,7 +243,7 @@ public class Main {
             System.out.println("Game Over. White wins.");
         }
 
-        System.out.println("\n" + "Check if knight knows to protect the king");
+        System.out.println("\n" + "Check if knight protects the king");
         initialBoard = new ChessBoard("3rk3/8/8/8/4N3/8/8/3K4 w KQkq - 0 1");
         nextMove = initialBoard;
         cutoffDepth = 6;
@@ -278,8 +278,8 @@ public class Main {
             System.out.println("Game Over. White wins.");
         }
 
-        System.out.println("\n" + "Check if knight knows to avoid the pawn attack");
-        initialBoard = new ChessBoard("7k/8/8/8/8/3p4/8/N6K w KQkq - 0 1");
+        System.out.println("\n" + "Check if the knight avoids the pawn's attack");
+        initialBoard = new ChessBoard("7k/8/8/8/2p5/8/8/N6K w KQkq - 0 1");
         nextMove = initialBoard;
         cutoffDepth = 6;
         whiteToMove = true;
