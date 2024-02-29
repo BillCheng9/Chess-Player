@@ -160,18 +160,19 @@ public class ChessBoard {
                         (bitCount(this.BN) * 3) +
                         (bitCount(this.BR) * 5) +
                         (bitCount(this.BQ) * 9) +
+                        (bitCount(this.BK) * 2000000) +
                         (bitCount(this.BP));
         int ownMaterial =
                 (bitCount(this.WB) * 3) +
                         (bitCount(this.WN) * 3) +
                         (bitCount(this.WR) * 5) +
                         (bitCount(this.WQ) * 9) +
+                        (bitCount(this.WK) * 2000000) +
                         (bitCount(this.WP));
         if (whiteToMove) {
             materialDiff = ownMaterial - opponentMaterial;
         } else {
             materialDiff = opponentMaterial - ownMaterial;
-
         }
         return materialDiff;
     }

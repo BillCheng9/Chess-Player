@@ -193,9 +193,9 @@ public class Main {
         System.out.println("");
 
         System.out.println("\n" + "------ Test Minimax ------" + "\n");
-        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1");
         ChessBoard nextMove = initialBoard;
-        int cutoffDepth = 2;
+        int cutoffDepth = 4;
         boolean whiteToMove = true;
         Scanner scanner = new Scanner(System.in);
 

@@ -229,8 +229,7 @@ public class Move {
         long initialOwnKing = ownKing;
 
         // Save the initial board state
-        ChessBoard initialBoard = new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing);
-        chessBoard = initialBoard;
+        chessBoard = new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing);
 
         // Get pawn moves
         if (initialOwnPawns != 0L) {
@@ -345,7 +344,7 @@ public class Move {
             }
         }
 
-// Get rook moves
+        // Get rook moves
         if (initialOwnRooks != 0L) {
             long rooks = initialOwnRooks;
             while (rooks != 0L) {
@@ -419,7 +418,7 @@ public class Move {
             }
         }
 
-// Get king moves
+        // Get king moves
         if (initialOwnKing != 0L) {
             long kings = initialOwnKing;
             while (kings != 0L) {
