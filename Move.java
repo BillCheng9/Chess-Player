@@ -41,14 +41,18 @@ public class Move {
         return nm;
     }
 
-    public long getPawnMoves(long myPawns, long sameOccupied, long otherOccupied){
+    public static long getWhitePawnCapture(long pawn, long sameOccupied, long otherOccupied){
+        return (pawn << 7 | pawn << 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
+    }
+
+    public static long getWhitePawnMoves(long myPawns, long sameOccupied, long otherOccupied){
         long pawnMoves = 0L;
         long fPawnMoves;
         while (myPawns != 0L){
             long pawn = Long.highestOneBit(myPawns);
             long singleStep = pawn << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
             long doubleStep = singleStep << 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
-            long capture = (pawn << 7 | pawn << 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
+            long capture = Move.getWhitePawnCapture(pawn, sameOccupied, otherOccupied); // shift pawn up diagonally
             if (pawn <= 32768) { // if pawn is located on first rank
                 fPawnMoves = singleStep | doubleStep | capture;
             }
@@ -56,7 +60,31 @@ public class Move {
                 fPawnMoves = singleStep | capture;
             }
             pawnMoves |= fPawnMoves;
-            sameOccupied = (~pawn) & sameOccupied;
+            myPawns = (~pawn) & myPawns;
+        }
+        return pawnMoves;
+    }
+
+    public static long getBlackPawnCapture(long pawn, long sameOccupied, long otherOccupied){
+        return (pawn >> 7 | pawn >> 9) & (otherOccupied); // shift pawn up diagonally as long as there is a black piece
+    }
+
+    public static long getBlackPawnMoves(long myPawns, long sameOccupied, long otherOccupied){
+        long pawnMoves = 0L;
+        long fPawnMoves;
+        while (myPawns != 0L){
+            long pawn = Long.highestOneBit(myPawns);
+            long singleStep = pawn >> 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up a rank
+            long doubleStep = singleStep >> 8 & (~sameOccupied) & (~otherOccupied); // shift pawn up two ranks
+            long capture = Move.getBlackPawnCapture(pawn, sameOccupied, otherOccupied); // shift pawn up diagonally as long as there is a black piece
+            if (pawn > 140737488355328L) { // if pawn is located on first rank
+                fPawnMoves = singleStep | doubleStep | capture;
+            }
+            else {
+                fPawnMoves = singleStep | capture;
+            }
+            pawnMoves |= fPawnMoves;
+            myPawns = (~pawn) & myPawns;
         }
         return pawnMoves;
     }

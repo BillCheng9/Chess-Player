@@ -117,18 +117,96 @@ public class ChessBoard {
                 (bitCount(this.WR) * 5) +
                 (bitCount(this.WQ) * 9) +
                 (bitCount(this.WP));
-        int materialDiff = whiteMaterial - blackMaterial;
-        return materialDiff;
+        return whiteMaterial - blackMaterial;
     }
 
-    /*
-     *
-     * @return attacked - is this square attacked by any of black's pieces?
+    /**
+     * @param square - the square to check for attacks on
+     * @param side - 'b' to check for black's attacks on square, 'w' for white attacks
+     * @return attacked - is this square attacked by any of the given side's pieces?
+     * */
 
-    public boolean attackedByBlack(long square){
-        long allMoves =
+    public boolean attackedBy(long square, char side){
+        boolean attacked = false;
+        long same; // my pieces
+        long other; // opponent's pieces (the side we are checking for attacks from)
+        long otherPawns;
+        long otherKnights;
+        long otherBishops;
+        long otherRooks;
+        long otherQueens;
+
+        long W = this.WP | this.WN | this.WB | this.WR | this.WQ | this.WK; // white occupancy
+        long B = this.BP | this.BN | this.BB | this.BR | this.BQ | this.BK; // black occupancy
+
+        if (side == 'b'){
+            otherPawns = this.BP;
+            otherKnights = this.BN;
+            otherBishops = this.BB;
+            otherRooks = this.BR;
+            otherQueens = this.BQ;
+            same = W;
+            other = B;
+        }
+        else {
+            otherPawns = this.WP;
+            otherKnights = this.WN;
+            otherBishops = this.WB;
+            otherRooks = this.WR;
+            otherQueens = this.WQ;
+            same = B;
+            other = W;
+        }
+
+/* pretend there is friendly piece on the square -
+ *  if it can capture the same piece type from black, that black piece is attacking the square
+ */
+        for (int i = 0; i < 5; i++){
+            if (i == 0){
+                if (side == 'b'){
+                if ((Move.getWhitePawnCapture(square, same, other) & otherPawns) != 0L){
+                    attacked = true;
+                    System.out.println("pawn");
+                    break;
+                }
+            }
+                else {
+                    if ((Move.getBlackPawnCapture(square, same, other) & otherPawns) != 0L) {
+                        attacked = true;
+                        System.out.println("pawn");
+                        break;
+                    }
+                }
+                }
+            else if (i == 1){
+                if ((Move.getKnightMoves(square, same) & otherKnights) != 0L){
+                    attacked = true;
+                    System.out.println("knight");
+                    break;
+                }
+            }
+            else if (i == 2){
+                if ((Move.getBishopMoves(square, same, other) & otherBishops) != 0L){
+                    attacked = true;
+                    System.out.println("bishop");
+                    break;
+                }
+            }
+            else if (i == 3){
+                if ((Move.getRookMoves(square, same, other) & otherRooks) != 0L){
+                    attacked = true;
+                    System.out.println("rook");
+                    break;
+                }
+            }
+            else {
+                if ((Move.getQueenMoves(square, same, other) & otherQueens) != 0L){
+                    attacked = true;
+                    System.out.println("queen");
+                    break;
+                }
+            }
+        }
         return attacked;
     }
-    */
-
 }

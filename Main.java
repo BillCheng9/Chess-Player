@@ -51,7 +51,7 @@ public class Main {
         ChessBoard.drawArray(pawnTestWP);
         System.out.println("");
         Move move = new Move();
-        long WPM = move.getPawnMoves(pawnTestWP, wPawnTest, bPawnTest);
+        long WPM = move.getWhitePawnMoves(pawnTestWP, wPawnTest, bPawnTest);
         ChessBoard.drawArray(WPM);
 
         System.out.println("");
@@ -172,5 +172,17 @@ public class Main {
         System.out.println("White queen moves");
         long WQm = Move.getQueenMoves(QWQ, wQTest, bQTest);
         ChessBoard.drawArray(WQm);
+
+        System.out.println("Test attacked by function: everything on 6th rank should be attacked by black");
+        ChessBoard.drawArray(140737488355328L);
+        System.out.println(chessBoard.attackedBy(140737488355328L, 'b'));
+        ChessBoard.drawArray(8796093022208L);
+        System.out.println(chessBoard.attackedBy(8796093022208L, 'b'));
+        System.out.println("Square on 5th rank should not be attacked by black");
+        ChessBoard.drawArray(68719476736L);
+        System.out.println(chessBoard.attackedBy(68719476736L, 'b'));
+        System.out.println("Square on 3rd rank should be attacked by white");
+        ChessBoard.drawArray(262144L);
+        System.out.println(chessBoard.attackedBy(262144L, 'w'));
     }
 }
