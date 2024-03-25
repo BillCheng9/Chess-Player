@@ -179,6 +179,8 @@ public class ChessBoard {
 
     /***
      * check to see if the game is over
+     * For now, implemented as a check to see if the king is captured (which is not a legal event in chess)
+     * Later, we will implement this method to check if one side has been checkmated 
      * @return true if the king is gone; false if it is not
      */
     public boolean isGameOver() {
