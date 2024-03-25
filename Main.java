@@ -59,9 +59,13 @@ public class Main {
 
         System.out.println("");
         System.out.println("------ Test evaluation function ------");
+        String sBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        ChessBoard startBoard = new ChessBoard(sBoard);
         System.out.println("Should be 0, because all pieces are on the board");
-        System.out.println(chessBoard.evaluateWhite(true));
-        System.out.println("Should be 7, because white is up by 7 pawns");
+        startBoard.drawBoard();
+        System.out.println(startBoard.evaluateWhite(true));
+        System.out.println("Should be 725, because white is up by 7 pawns and has a knight in a good spot");
+        chessBoardPawnTest.drawBoard();
         System.out.println(chessBoardPawnTest.evaluateWhite(true));
 
         System.out.println("-------Test King moves-------" + "\n");

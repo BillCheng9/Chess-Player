@@ -3,6 +3,58 @@ import java.util.Arrays;
 import static java.lang.Long.bitCount;
 
 public class ChessBoard {
+    private final int[] ROOK_PSQT = {
+            500, 500, 500, 500, 500, 500, 500, 500,
+            520, 520, 520, 520, 520, 520, 520, 520,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 510, 510, 505, 500, 500,
+    };
+    private final int[] KNIGHT_PSQT = {
+            290, 300, 300, 300, 300, 300, 300, 290,
+            300, 305, 305, 305, 305, 305, 305, 300,
+            300, 305, 325, 325, 325, 325, 305, 300,
+            300, 305, 325, 325, 325, 325, 305, 300,
+            300, 305, 325, 325, 325, 325, 305, 300,
+            300, 305, 325, 325, 325, 325, 305, 300,
+            300, 305, 305, 305, 305, 305, 305, 300,
+            290, 310, 300, 300, 300, 300, 310, 290
+    };
+    private final int[] KING_PSQT = {
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
+    };
+    private final int[] BISHOP_PSQT = {
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 305, 300, 300, 300, 300, 305, 300,
+            300, 300, 310, 310, 310, 310, 300, 300,
+            300, 300, 310, 310, 310, 310, 300, 300,
+            300, 300, 325, 310, 310, 325, 300, 300,
+            300, 300, 310, 310, 310, 310, 300, 300,
+            300, 310, 300, 300, 300, 300, 310, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+    };
+
+    private final int[] QUEEN_PSQT = {
+            900, 900, 900, 900, 900, 900, 900, 900,
+            920, 920, 920, 920, 920, 920, 920, 920,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+    };
+
     private long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
     ChessBoard(String fen){
         String[] fenParts = fen.split(" ");
@@ -150,31 +202,81 @@ public class ChessBoard {
 
 
     /**
-     * Basic evaluation function that only looks at material
-     * @return materialDiff - difference in material, white - black
+     * Basic evaluation function using piece square tables
+     * @return materialDiff: difference in material, own - opponent, in centipawns
      */
     public int evaluateWhite(boolean whiteToMove){
-        int materialDiff;
-        int opponentMaterial =
-                (bitCount(this.BB) * 3) +
-                        (bitCount(this.BN) * 3) +
-                        (bitCount(this.BR) * 5) +
-                        (bitCount(this.BQ) * 9) +
-                        (bitCount(this.BK) * 2000000) +
-                        (bitCount(this.BP));
-        int ownMaterial =
-                (bitCount(this.WB) * 3) +
-                        (bitCount(this.WN) * 3) +
-                        (bitCount(this.WR) * 5) +
-                        (bitCount(this.WQ) * 9) +
-                        (bitCount(this.WK) * 2000000) +
-                        (bitCount(this.WP));
-        if (whiteToMove) {
-            materialDiff = ownMaterial - opponentMaterial;
-        } else {
-            materialDiff = opponentMaterial - ownMaterial;
+        int eval = 0;
+
+        Long bb = this.BB;
+        Long bn = this.BN;
+        Long br = this.BR;
+        Long bq = this.BQ;
+        Long bk = this.BK;
+
+        Long wb = this.WB;
+        Long wn = this.WN;
+        Long wr = this.WR;
+        Long wq = this.WQ;
+        Long wk = this.WK;
+
+        // calculate own material
+        // look up the material value of each piece based on the piece square table, then add it to the total
+        while(wb != 0){ // while there are still white bishops on the board
+            eval += BISHOP_PSQT[Long.numberOfLeadingZeros(wb)]; // use number of leading zeros to index into psqt
+            wb = wb & (~Long.highestOneBit(wb)); // take one bishop off the board
         }
-        return materialDiff;
+        while(wn != 0){
+            eval += KNIGHT_PSQT[Long.numberOfLeadingZeros(wn)];
+            wn = wn & (~Long.highestOneBit(wn));
+        }
+        while(wr != 0){
+            eval += ROOK_PSQT[Long.numberOfLeadingZeros(wr)];
+            wr = wr & (~Long.highestOneBit(wr));
+        }
+        while(wq != 0){
+            eval += QUEEN_PSQT[Long.numberOfLeadingZeros(wq)];
+            wq = wq & (~Long.highestOneBit(wq));
+        }
+        while(wk != 0){
+            eval += KING_PSQT[Long.numberOfLeadingZeros(wk)];
+            wk = wk & (~Long.highestOneBit(wk));
+        }
+        eval += bitCount(this.WP) * 100;
+
+        // calculate opponent material, subtract it from eval
+        while(bb != 0){
+            Long piece = Long.highestOneBit(bb); // isolate one piece first
+            eval -= BISHOP_PSQT[Long.numberOfTrailingZeros(bb)]; // use trailing zeros to flip the psqt to black's pov
+            bb = bb & (~piece); // take the piece off
+        }
+        while(bn != 0){
+            Long piece = Long.highestOneBit(bn);
+            eval -= KNIGHT_PSQT[Long.numberOfTrailingZeros(piece)];
+            bn = bn & (~piece);
+        }
+        while(br != 0){
+            Long piece = Long.highestOneBit(br);
+            eval -= ROOK_PSQT[Long.numberOfTrailingZeros(br)];
+            br = br & (~piece);
+        }
+        while(bq != 0){
+            Long piece = Long.highestOneBit(bq);
+            eval -= QUEEN_PSQT[Long.numberOfTrailingZeros(bq)];
+            bq = bq & (~piece);
+        }
+        while(bk != 0){
+            Long piece = Long.highestOneBit(bk);
+            eval -= KING_PSQT[Long.numberOfTrailingZeros(bk)];
+            bk = bk & (~piece);
+        }
+        eval -= bitCount(this. BP) * 100;
+
+        if (!whiteToMove) {
+            eval = -eval;
+        }
+
+        return eval;
     }
 
     /***
