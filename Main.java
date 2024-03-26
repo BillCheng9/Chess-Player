@@ -229,7 +229,7 @@ public class Main {
                 if (userMove.equals("forfeit")) {
                     break;
                 }
-                nextMove = initialBoard.performMove(userMove);
+                //nextMove = initialBoard.performMove(userMove);
             }
 
             System.out.println("\n Move:");
@@ -265,7 +265,7 @@ public class Main {
                 if (userMove.equals("forfeit")) {
                     break;
                 }
-                nextMove = initialBoard.performMove(userMove);
+                //nextMove = initialBoard.performMove(userMove);
             }
 
             System.out.println("\n Move:");
@@ -300,7 +300,7 @@ public class Main {
                 if (userMove.equals("forfeit")) {
                     break;
                 }
-                nextMove = initialBoard.performMove(userMove);
+                //nextMove = initialBoard.performMove(userMove);
             }
 
             System.out.println("\n Move:");
@@ -327,15 +327,36 @@ public class Main {
         initialBoard.drawBoard();
 
         while (!nextMove.isGameOver()) {
+            long startSquare = 0;
+            long targetSquare = 0;
             if (whiteToMove) {
                 nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
             } else {
-                System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
-                String userMove = scanner.nextLine();
-                if (userMove.equals("forfeit")) {
-                    break;
+                while(true){
+                    System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
+                    String userMove = scanner.nextLine();
+                    if (userMove.equals("forfeit")) {
+                        break;
+                    }
+                    // get the starting and ending square
+                    int startFile = 9 - userMove.charAt(0) - 'a';
+                    int startRank = Character.getNumericValue(userMove.charAt(1)) - 1;
+                    int endFile = 9 - userMove.charAt(2) - 'a';
+                    int endRank = Character.getNumericValue(userMove.charAt(3)) - 1;
+                    startSquare = 1L << (startRank * 8 + startFile);
+                    targetSquare = 1L << (endRank * 8 + endFile);
+
+                    if(userMove.charAt(0) > 'h' || userMove.charAt(0) < 'a'
+                    || userMove.charAt(1) > '8' || userMove.charAt(1) < '0'
+                    || userMove.charAt(2) > 'h' || userMove.charAt(2) < 'a'
+                    || userMove.charAt(3) > '8' || userMove.charAt(3) < '0'){
+                        System.out.println("Invalid Move");
+                    }
+                    else{       
+                        break;
+                    }
                 }
-                nextMove = initialBoard.performMove(userMove);
+                nextMove = initialBoard.performMove(startSquare, targetSquare);
             }
 
             System.out.println("\n Move:");

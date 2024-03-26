@@ -295,17 +295,8 @@ public class ChessBoard {
      *
      * @return the chess board after the user's move
      */
-    public ChessBoard performMove(String move){
+    public ChessBoard performMove(Long startSquare, Long targetSquare){
         ChessBoard userMove = null;
-
-        // get the starting and ending square
-        int startFile = 9 - move.charAt(0) - 'a';
-        int startRank = Character.getNumericValue(move.charAt(1)) - 1;
-        int endFile = 9 - move.charAt(2) - 'a';
-        int endRank = Character.getNumericValue(move.charAt(3)) - 1;
-
-        long startSquare = 1L << (startRank * 8 + startFile);
-        long targetSquare = 1L << (endRank * 8 + endFile);
 
         // make the black move
         if ((startSquare & BP) != 0) {
