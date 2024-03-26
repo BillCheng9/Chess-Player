@@ -388,7 +388,7 @@ public class Main {
                         else{System.out.println("Piece can't move there!");}
                     }
                     else if((startSquare & initialBoard.getBQ()) != 0){
-                        if((targetSquare & Move.getSRookMoves(startSquare, playerPieces, computerPieces)) > 1){
+                        if((targetSquare & Move.getSQueenMoves(startSquare, playerPieces, computerPieces)) > 1){
                             break;
                         }
                         else{System.out.println("Piece can't move there!");}
