@@ -346,14 +346,55 @@ public class Main {
                     startSquare = 1L << (startRank * 8 + startFile);
                     targetSquare = 1L << (endRank * 8 + endFile);
 
+                    long playerPieces = initialBoard.getBP() | initialBoard.getBR() | initialBoard.getBB() | initialBoard.getBK() | initialBoard.getBN() | initialBoard.getBQ();
+                    long computerPieces = initialBoard.getWP() | initialBoard.getWR() | initialBoard.getWB() | initialBoard.getWK() | initialBoard.getWN() | initialBoard.getWQ();
+
+                    //valid input check
                     if(userMove.charAt(0) > 'h' || userMove.charAt(0) < 'a'
                     || userMove.charAt(1) > '8' || userMove.charAt(1) < '0'
                     || userMove.charAt(2) > 'h' || userMove.charAt(2) < 'a'
                     || userMove.charAt(3) > '8' || userMove.charAt(3) < '0'){
-                        System.out.println("Invalid Move");
+                        System.out.println("Invalid Square");
+                    }
+                    //valid moves check
+                    else if((startSquare & initialBoard.getBP()) != 0){
+                        if((targetSquare & Move.getBlackPawnMoves(startSquare, playerPieces, computerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
+                    }
+                    else if((startSquare & initialBoard.getBR()) != 0){
+                        if((targetSquare & Move.getSRookMoves(startSquare, playerPieces, computerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
+                    }
+                    else if((startSquare & initialBoard.getBB()) != 0){
+                        if((targetSquare & Move.getSBishopMoves(startSquare, playerPieces, computerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
+                    }
+                    else if((startSquare & initialBoard.getBN()) != 0){
+                        if((targetSquare & Move.getSKnightMoves(startSquare, playerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
+                    }
+                    else if((startSquare & initialBoard.getBK()) != 0){
+                        if((targetSquare & Move.getSKingMoves(startSquare, playerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
+                    }
+                    else if((startSquare & initialBoard.getBQ()) != 0){
+                        if((targetSquare & Move.getSRookMoves(startSquare, playerPieces, computerPieces)) > 1){
+                            break;
+                        }
+                        else{System.out.println("Piece can't move there!");}
                     }
                     else{       
-                        break;
+                        System.out.println("No piece there!");
                     }
                 }
                 nextMove = initialBoard.performMove(startSquare, targetSquare);
