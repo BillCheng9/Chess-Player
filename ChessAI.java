@@ -1,10 +1,6 @@
 import java.util.List;
 
 public class ChessAI {
-    // Constants for initial alpha and beta values
-    private static final int INITIAL_ALPHA = Integer.MIN_VALUE;
-    private static final int INITIAL_BETA = Integer.MAX_VALUE;
-
     /**
      * Computes the best move for the given chessboard using the basic minimax algorithm with alpha-beta pruning.
      *
@@ -16,10 +12,16 @@ public class ChessAI {
     public static ChessBoard computeMove(ChessBoard board, int cutoffDepth, boolean player) {
         List<ChessBoard> possibleMoves = Move.getAllMoves(board, player);
 
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
+
         ChessBoard bestMove = null;
         int maxEval = Integer.MIN_VALUE;
         for (ChessBoard move : possibleMoves) {
-            int eval = computeMin(move, 1, INITIAL_ALPHA, INITIAL_BETA, cutoffDepth, !player);
+            int eval = computeMin(move, 1, alpha, beta, cutoffDepth, !player);
+            if (eval > alpha) {
+                alpha = eval; // update alpha
+            }
             if (eval > maxEval) { // depth 0 max evaluation
                 maxEval = eval;
                 bestMove = move;
@@ -51,10 +53,10 @@ public class ChessAI {
             int childVal = computeMin(move, currDepth + 1, alpha, beta, cutoffDepth, !player);
             maxEval = Math.max(maxEval, childVal);
             if (childVal > alpha) {
-                alpha = childVal;
+                alpha = childVal; // update alpha
             }
             if (beta <= alpha) {
-                break;
+                break; // beta pruning
             }
         }
 
@@ -84,10 +86,10 @@ public class ChessAI {
             int childVal = computeMax(move, currDepth + 1, alpha, beta, cutoffDepth, !player);
             minEval = Math.min(minEval, childVal);
             if (childVal < beta) {
-                beta = childVal;
+                beta = childVal; // update beta
             }
             if (beta <= alpha) {
-                break;
+                break; //  alpha pruning
             }
         }
 
