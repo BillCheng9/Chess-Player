@@ -3,6 +3,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Main main = new Main();
+//        main.testKnightMoves();
+//        main.testPawnMoves();
+//        main.testEvaluationFunction();
+//        main.testKingMoves();
+//        main.testBishopMoves();
+//        main.testRookMoves();
+//        main.testQueenMoves();
+//        main.testAttackedByFunction();
+//        main.testMoveList();
+        main.testSearchAlgorithm();
+//        main.testRealGame();
+        main.testAIvsAI();
+    }
+    private void testKnightMoves() {
         System.out.println("\n" + "------ Test Knight moves ------" + "\n");
         String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1";
         ChessBoard chessBoard = new ChessBoard(board);
@@ -29,7 +44,9 @@ public class Main {
         System.out.println("");
         ChessBoard.drawArray(WNM);
         System.out.println("");
+    }
 
+    private void testPawnMoves() {
         // test pawn move generation
         String pawnTestBoard = "rnbkqb1r/8/8/8/8/3N3n/PPPPPPP1/RNBKQB1R w KQkq - 0 1";
         ChessBoard chessBoardPawnTest = new ChessBoard(pawnTestBoard);
@@ -58,6 +75,13 @@ public class Main {
         ChessBoard.drawArray(WPM);
 
         System.out.println("");
+    }
+
+    private void testEvaluationFunction() {
+        // test pawn move generation
+        String pawnTestBoard = "rnbkqb1r/8/8/8/8/3N3n/PPPPPPP1/RNBKQB1R w KQkq - 0 1";
+        ChessBoard chessBoardPawnTest = new ChessBoard(pawnTestBoard);
+
         System.out.println("------ Test evaluation function ------");
         String sBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         ChessBoard startBoard = new ChessBoard(sBoard);
@@ -67,7 +91,9 @@ public class Main {
         System.out.println("Should be 725, because white is up by 7 pawns and has a knight in a good spot");
         chessBoardPawnTest.drawBoard();
         System.out.println(chessBoardPawnTest.evaluateWhite(true));
+    }
 
+    private void testKingMoves() {
         System.out.println("-------Test King moves-------" + "\n");
         String kboard = "rnbqkbnr/pppppppp/8/8/3N4/8/3P1p2/4K3 w KQkq - 0 1";
         ChessBoard kchessBoard = new ChessBoard(kboard);
@@ -92,7 +118,9 @@ public class Main {
         System.out.println("White king moves");
         long WKkM = Move.getKingMoves(KWK, wKTest);
         ChessBoard.drawArray(WKkM);
+    }
 
+    private void testBishopMoves() {
         System.out.println("-------Test Bishop moves-------" + "\n");
         String bboard = "rnbqkbnr/pppppppp/8/3B4/4B3/8/PPPPPPPP/8 w KQkq - 0 1";
         ChessBoard bchessBoard = new ChessBoard(bboard);
@@ -121,7 +149,9 @@ public class Main {
         System.out.println("White bishop moves");
         long WBbm = Move.getBishopMoves(BWB, wBTest,bBTest);
         ChessBoard.drawArray(WBbm);
+    }
 
+    private void testRookMoves() {
         System.out.println("-------Test Rook moves-------" + "\n");
         String rboard = "rnbqkbnr/pppppppp/8/1p1R1P2/7R/8/PPPPPPPP/8 w KQkq - 0 1";
         ChessBoard rchessBoard = new ChessBoard(rboard);
@@ -150,7 +180,9 @@ public class Main {
         System.out.println("White Rook moves");
         long WRbm = Move.getRookMoves(RWR, wRTest,bRTest);
         ChessBoard.drawArray(WRbm);
+    }
 
+    private void testQueenMoves() {
         System.out.println("-------Test Queen moves-------" + "\n");
         String qboard = "rnbqkbnr/pppppppp/8/1p1Q1P2/8/6Q1/PPPPPPPP/8 w KQkq - 0 1";
         ChessBoard qchessBoard = new ChessBoard(qboard);
@@ -179,7 +211,11 @@ public class Main {
         System.out.println("White queen moves");
         long WQm = Move.getQueenMoves(QWQ, wQTest, bQTest);
         ChessBoard.drawArray(WQm);
+    }
 
+    private void testAttackedByFunction() {
+        String board = "rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1";
+        ChessBoard chessBoard = new ChessBoard(board);
 
         System.out.println("Test attacked by function: everything on 6th rank should be attacked by black");
         ChessBoard.drawArray(140737488355328L);
@@ -192,6 +228,11 @@ public class Main {
         System.out.println("Square on 3rd rank should be attacked by white");
         ChessBoard.drawArray(262144L);
         System.out.println(chessBoard.attackedBy(262144L, 'w'));
+    }
+
+    private void testMoveList() {
+        String board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        ChessBoard chessBoard = new ChessBoard(board);
 
         System.out.println("\n" + "------ Test Move list ------" + "\n");
         System.out.println("rnbqkbnr/pppppppp/8/8/3N4/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1" + "\n");
@@ -208,14 +249,15 @@ public class Main {
         System.out.println("");
         allMoves.get(3).drawBoard();
         System.out.println("");
+    }
 
+    private void testSearchAlgorithm() {
         System.out.println("\n" + "------ Test Search Algorithm ------" + "\n");
         System.out.println("\n" + "Check if the algorithm captures the rook over the pawn");
         ChessBoard initialBoard = new ChessBoard("2p1r2k/8/3N4/8/8/8/8/3K4 w KQkq - 0 1");
         ChessBoard nextMove = initialBoard;
         int cutoffDepth = 6;
         boolean whiteToMove = true;
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Current Board:");
         initialBoard.drawBoard();
@@ -316,88 +358,28 @@ public class Main {
         } else {
             System.out.println("Game Over. White wins.");
         }
+    }
 
+    private void testRealGame() {
         System.out.println("\n" + "A real game.");
-        initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
-        nextMove = initialBoard;
-        cutoffDepth = 6;
-        whiteToMove = true;
+
+        Scanner scanner = new Scanner(System.in);
+        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
+        ChessBoard nextMove = initialBoard;
+        int cutoffDepth = 8;
+        boolean whiteToMove = true;
 
         System.out.println("Current Board:");
         initialBoard.drawBoard();
 
         while (!nextMove.isGameOver()) {
-            long startSquare = 0;
-            long targetSquare = 0;
             if (whiteToMove) {
                 nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
             } else {
-                while(true){
-                    System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
-                    String userMove = scanner.nextLine();
-                    if (userMove.equals("forfeit")) {
-                        break;
-                    }
-                    // get the starting and ending square
-                    int startFile = 9 - userMove.charAt(0) - 'a';
-                    int startRank = Character.getNumericValue(userMove.charAt(1)) - 1;
-                    int endFile = 9 - userMove.charAt(2) - 'a';
-                    int endRank = Character.getNumericValue(userMove.charAt(3)) - 1;
-                    startSquare = 1L << (startRank * 8 + startFile);
-                    targetSquare = 1L << (endRank * 8 + endFile);
-
-                    long playerPieces = initialBoard.getBP() | initialBoard.getBR() | initialBoard.getBB() | initialBoard.getBK() | initialBoard.getBN() | initialBoard.getBQ();
-                    long computerPieces = initialBoard.getWP() | initialBoard.getWR() | initialBoard.getWB() | initialBoard.getWK() | initialBoard.getWN() | initialBoard.getWQ();
-
-                    //valid input check
-                    if(userMove.charAt(0) > 'h' || userMove.charAt(0) < 'a'
-                    || userMove.charAt(1) > '8' || userMove.charAt(1) < '0'
-                    || userMove.charAt(2) > 'h' || userMove.charAt(2) < 'a'
-                    || userMove.charAt(3) > '8' || userMove.charAt(3) < '0'){
-                        System.out.println("Invalid Square");
-                    }
-                    //valid moves check
-                    else if((startSquare & initialBoard.getBP()) != 0){
-                        if((targetSquare & Move.getBlackPawnMoves(startSquare, playerPieces, computerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else if((startSquare & initialBoard.getBR()) != 0){
-                        if((targetSquare & Move.getSRookMoves(startSquare, playerPieces, computerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else if((startSquare & initialBoard.getBB()) != 0){
-                        if((targetSquare & Move.getSBishopMoves(startSquare, playerPieces, computerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else if((startSquare & initialBoard.getBN()) != 0){
-                        if((targetSquare & Move.getSKnightMoves(startSquare, playerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else if((startSquare & initialBoard.getBK()) != 0){
-                        if((targetSquare & Move.getSKingMoves(startSquare, playerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else if((startSquare & initialBoard.getBQ()) != 0){
-                        if((targetSquare & Move.getSQueenMoves(startSquare, playerPieces, computerPieces)) > 1){
-                            break;
-                        }
-                        else{System.out.println("Piece can't move there!");}
-                    }
-                    else{       
-                        System.out.println("No piece there!");
-                    }
+                nextMove = initialBoard.checkMove();
+                if (nextMove == null){
+                    break;
                 }
-                nextMove = initialBoard.performMove(startSquare, targetSquare);
             }
 
             System.out.println("\n Move:");
@@ -415,5 +397,38 @@ public class Main {
         } else {
             System.out.println("Game Over. White wins.");
         }
+    }
+
+    private void testAIvsAI() {
+        System.out.println("\n" + "AI vs AI Game:");
+        Scanner scanner = new Scanner(System.in);
+        ChessBoard board = new ChessBoard("1N3r2/k1p5/6p1/P4bPP/P7/3q3p/K1P1nb2/8 w - - 0 1"); // Starting position
+        int cutoffDepth = 8;
+        boolean whiteToMove = true;
+
+        System.out.println("Initial Board:");
+        board.drawBoard();
+
+        while (!board.isGameOver()) {
+            if (whiteToMove) {
+                System.out.println("White's turn (AI):");
+                board = ChessAI.computeMove(board, 8, true);
+            } else {
+                System.out.println("Black's turn (AI):");
+                board = ChessAI.computeMove(board, 4, true);
+            }
+            board.drawBoard();
+
+            whiteToMove = !whiteToMove;
+        }
+
+        scanner.close();
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins.");
+        } else {
+            System.out.println("Game Over. White wins.");
+        }
+
     }
 }
