@@ -41,6 +41,6 @@ public class ZHashing {
         if ((board.getBR() & pieceMask) != 0) return 10;
         if ((board.getBQ() & pieceMask) != 0) return 11;
         if ((board.getBK() & pieceMask) != 0) return 12;
-        return 0;
+        return 0; // when the square is empty
     }
 }

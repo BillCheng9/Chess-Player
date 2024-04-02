@@ -14,8 +14,8 @@ public class Main {
 //        main.testAttackedByFunction();
 //        main.testMoveList();
         main.testSearchAlgorithm();
-//        main.testRealGame();
-        main.testAIvsAI();
+        main.testRealGame();
+//        main.testAIvsAI(); // not working!!!
     }
     private void testKnightMoves() {
         System.out.println("\n" + "------ Test Knight moves ------" + "\n");
@@ -402,8 +402,7 @@ public class Main {
     private void testAIvsAI() {
         System.out.println("\n" + "AI vs AI Game:");
         Scanner scanner = new Scanner(System.in);
-        ChessBoard board = new ChessBoard("1N3r2/k1p5/6p1/P4bPP/P7/3q3p/K1P1nb2/8 w - - 0 1"); // Starting position
-        int cutoffDepth = 8;
+        ChessBoard board = new ChessBoard("1N3r2/k1p5/6p1/P4bPP/P7/3q3p/K1P1nb2/8 w - - 0 1");
         boolean whiteToMove = true;
 
         System.out.println("Initial Board:");
@@ -429,6 +428,5 @@ public class Main {
         } else {
             System.out.println("Game Over. White wins.");
         }
-
     }
 }
