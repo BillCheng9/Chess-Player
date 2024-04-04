@@ -1,6 +1,13 @@
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ChessAI {
+    private static Map<Long, Integer> transpositionTable;
+    static {
+        transpositionTable = new HashMap<>();
+    }
+
     /**
      * Computes the best move for the given chessboard using the basic minimax algorithm with alpha-beta pruning.
      *
@@ -42,6 +49,12 @@ public class ChessAI {
      * @return The maximum evaluation value for the given chessboard.
      */
     private static int computeMax(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
+        // Check if the board position is already evaluated
+        Long hash = ZHashing.generateHashKey(board);
+        if (transpositionTable.containsKey(hash)) {
+            return transpositionTable.get(hash);
+        }
+
         if (currDepth >= cutoffDepth || board.isGameOver()) {
             return board.evaluateWhite(!player);
         }
@@ -60,6 +73,8 @@ public class ChessAI {
             }
         }
 
+        // Store the evaluated position in the transposition table
+        transpositionTable.put(hash, maxEval);
         return maxEval;
     }
 
@@ -75,6 +90,12 @@ public class ChessAI {
      * @return The minimum evaluation value for the given chessboard.
      */
     private static int computeMin(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
+        // Check if the board position is already evaluated
+        Long hash = ZHashing.generateHashKey(board);
+        if (transpositionTable.containsKey(hash)) {
+            return transpositionTable.get(hash);
+        }
+
         if (currDepth >= cutoffDepth || board.isGameOver()) {
             return board.evaluateWhite(!player);
         }
@@ -93,6 +114,8 @@ public class ChessAI {
             }
         }
 
+        // Store the evaluated position in the transposition table
+        transpositionTable.put(hash, minEval);
         return minEval;
     }
 }

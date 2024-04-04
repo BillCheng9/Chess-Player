@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static java.lang.Long.bitCount;
 
@@ -56,11 +57,13 @@ public class ChessBoard {
     };
 
     private long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
-    ChessBoard(String fen){
+
+    ChessBoard(String fen) {
         String[] fenParts = fen.split(" ");
         setBoard(fenParts[0]);
     }
-    ChessBoard(long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK){
+
+    ChessBoard(long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK) {
         this.WP = WP;
         this.WN = WN;
         this.WB = WB;
@@ -74,12 +77,13 @@ public class ChessBoard {
         this.BQ = BQ;
         this.BK = BK;
     }
-    public void setBoard(String position){
+
+    public void setBoard(String position) {
         int rank = 7;
         int file = 0;
 
-        for (char c:position.toCharArray()){
-            if(Character.isDigit(c)){
+        for (char c : position.toCharArray()) {
+            if (Character.isDigit(c)) {
                 file += Character.getNumericValue(c);
             } else if (c == '/') {
                 rank--;
@@ -104,6 +108,7 @@ public class ChessBoard {
             }
         }
     }
+
     public static void drawArray(long bitboard) {
         int[][] chessBoard = new int[8][8];
         for (int i = 0; i < 64; i++) {
@@ -118,27 +123,52 @@ public class ChessBoard {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
     }
+
     public void drawBoard() {
-        String chessBoard[][]=new String[8][8];
+        String chessBoard[][] = new String[8][8];
         String[] rank = {"8", "7", "6", "5", "4", "3", "2", "1"};
         String[] files = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
         for (int i = 0; i < 64; i++) {
             chessBoard[7 - i / 8][7 - i % 8] = " ";
         }
-        for (int i=0;i<64;i++) {
-            if (((WP>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="P";}
-            if (((WN>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="N";}
-            if (((WB>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="B";}
-            if (((WR>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="R";}
-            if (((WQ>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="Q";}
-            if (((WK>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="K";}
-            if (((BP>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="p";}
-            if (((BN>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="n";}
-            if (((BB>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="b";}
-            if (((BR>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="r";}
-            if (((BQ>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="q";}
-            if (((BK>>i)&1)==1) {chessBoard[7 - i / 8][7 - i % 8]="k";}
+        for (int i = 0; i < 64; i++) {
+            if (((WP >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "P";
+            }
+            if (((WN >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "N";
+            }
+            if (((WB >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "B";
+            }
+            if (((WR >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "R";
+            }
+            if (((WQ >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "Q";
+            }
+            if (((WK >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "K";
+            }
+            if (((BP >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "p";
+            }
+            if (((BN >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "n";
+            }
+            if (((BB >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "b";
+            }
+            if (((BR >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "r";
+            }
+            if (((BQ >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "q";
+            }
+            if (((BK >> i) & 1) == 1) {
+                chessBoard[7 - i / 8][7 - i % 8] = "k";
+            }
         }
         // add the file and rank names
         for (int i = 0; i < 8; i++) {
@@ -203,9 +233,10 @@ public class ChessBoard {
 
     /**
      * Basic evaluation function using piece square tables
+     *
      * @return materialDiff: difference in material, own - opponent, in centipawns
      */
-    public int evaluateWhite(boolean whiteToMove){
+    public int evaluateWhite(boolean whiteToMove) {
         int eval = 0;
 
         Long bb = this.BB;
@@ -222,55 +253,55 @@ public class ChessBoard {
 
         // calculate own material
         // look up the material value of each piece based on the piece square table, then add it to the total
-        while(wb != 0){ // while there are still white bishops on the board
+        while (wb != 0) { // while there are still white bishops on the board
             eval += BISHOP_PSQT[Long.numberOfLeadingZeros(wb)]; // use number of leading zeros to index into psqt
             wb = wb & (~Long.highestOneBit(wb)); // take one bishop off the board
         }
-        while(wn != 0){
+        while (wn != 0) {
             eval += KNIGHT_PSQT[Long.numberOfLeadingZeros(wn)];
             wn = wn & (~Long.highestOneBit(wn));
         }
-        while(wr != 0){
+        while (wr != 0) {
             eval += ROOK_PSQT[Long.numberOfLeadingZeros(wr)];
             wr = wr & (~Long.highestOneBit(wr));
         }
-        while(wq != 0){
+        while (wq != 0) {
             eval += QUEEN_PSQT[Long.numberOfLeadingZeros(wq)];
             wq = wq & (~Long.highestOneBit(wq));
         }
-        while(wk != 0){
+        while (wk != 0) {
             eval += KING_PSQT[Long.numberOfLeadingZeros(wk)];
             wk = wk & (~Long.highestOneBit(wk));
         }
         eval += bitCount(this.WP) * 100;
 
         // calculate opponent material, subtract it from eval
-        while(bb != 0){
+        while (bb != 0) {
             Long piece = Long.highestOneBit(bb); // isolate one piece first
             eval -= BISHOP_PSQT[Long.numberOfTrailingZeros(bb)]; // use trailing zeros to flip the psqt to black's pov
             bb = bb & (~piece); // take the piece off
         }
-        while(bn != 0){
+        while (bn != 0) {
             Long piece = Long.highestOneBit(bn);
             eval -= KNIGHT_PSQT[Long.numberOfTrailingZeros(piece)];
             bn = bn & (~piece);
         }
-        while(br != 0){
+        while (br != 0) {
             Long piece = Long.highestOneBit(br);
             eval -= ROOK_PSQT[Long.numberOfTrailingZeros(br)];
             br = br & (~piece);
         }
-        while(bq != 0){
+        while (bq != 0) {
             Long piece = Long.highestOneBit(bq);
             eval -= QUEEN_PSQT[Long.numberOfTrailingZeros(bq)];
             bq = bq & (~piece);
         }
-        while(bk != 0){
+        while (bk != 0) {
             Long piece = Long.highestOneBit(bk);
             eval -= KING_PSQT[Long.numberOfTrailingZeros(bk)];
             bk = bk & (~piece);
         }
-        eval -= bitCount(this. BP) * 100;
+        eval -= bitCount(this.BP) * 100;
 
         if (!whiteToMove) {
             eval = -eval;
@@ -291,15 +322,87 @@ public class ChessBoard {
 
     /***
      * make the move the user picked on a bitboard
-     * (not complete: it does not check if the user input is valid or if the moves is legal for the user)
      *
      * @return the chess board after the user's move
      */
-    public ChessBoard performMove(Long startSquare, Long targetSquare){
-        ChessBoard userMove = null;
+    public ChessBoard checkMove() {
+        Scanner scanner = new Scanner(System.in);
+        long startSquare = 0;
+        long targetSquare = 0;
 
+        while (true) {
+            System.out.print("Enter your move (e.g., e7e5) or forfeit: ");
+            String userMove = scanner.nextLine();
+            if (userMove.equals("forfeit")) {
+                break;
+            }
+            // get the starting and ending square
+            int startFile = 9 - userMove.charAt(0) - 'a';
+            int startRank = Character.getNumericValue(userMove.charAt(1)) - 1;
+            int endFile = 9 - userMove.charAt(2) - 'a';
+            int endRank = Character.getNumericValue(userMove.charAt(3)) - 1;
+            startSquare = 1L << (startRank * 8 + startFile);
+            targetSquare = 1L << (endRank * 8 + endFile);
+
+            long playerPieces = BP | BR | BB | BK | BN | BQ;
+            long computerPieces = WP | WR | WB | WK | WN | WQ;
+
+            if (userMove.charAt(0) > 'h' || userMove.charAt(0) < 'a'
+                    || userMove.charAt(1) > '8' || userMove.charAt(1) < '0'
+                    || userMove.charAt(2) > 'h' || userMove.charAt(2) < 'a'
+                    || userMove.charAt(3) > '8' || userMove.charAt(3) < '0') {
+                System.out.println("Invalid Square");
+            } else if ((startSquare & BP) != 0) {
+                if ((targetSquare & Move.getBlackPawnMoves(startSquare, playerPieces, computerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else if ((startSquare & BR) != 0) {
+                if ((targetSquare & Move.getSRookMoves(startSquare, playerPieces, computerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else if ((startSquare & BB) != 0) {
+                if ((targetSquare & Move.getSBishopMoves(startSquare, playerPieces, computerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else if ((startSquare & BN) != 0) {
+                if ((targetSquare & Move.getSKnightMoves(startSquare, playerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else if ((startSquare & BK) != 0) {
+                if ((targetSquare & Move.getSKingMoves(startSquare, playerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else if ((startSquare & BQ) != 0) {
+                if ((targetSquare & Move.getSQueenMoves(startSquare, playerPieces, computerPieces)) > 1) {
+                    break;
+                } else {
+                    System.out.println("Piece can't move there!");
+                }
+            } else {
+                System.out.println("No piece there!");
+            }
+        }
+        return performMove(startSquare, targetSquare);
+    }
+
+    public ChessBoard performMove(long startSquare, long targetSquare) {
+        ChessBoard userBoard = null;
+
+        if (startSquare == 0 || targetSquare == 0) {
+            return null;
+        }
         // make the black move
-        if ((startSquare & BP) != 0) {
+        else if ((startSquare & BP) != 0) {
             BP &= ~startSquare;
             BP |= targetSquare;
         } else if ((startSquare & BN) != 0) {
@@ -334,17 +437,16 @@ public class ChessBoard {
         }
 
         // create the board after the move
-        userMove = new ChessBoard(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+        userBoard = new ChessBoard(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 
-        return userMove;
+        return userBoard;
     }
 
     /**
-     *
      * @return attacked - is this square attacked by any of black's pieces?
      */
 
-    public boolean attackedBy(long square, char side){
+    public boolean attackedBy(long square, char side) {
         boolean attacked = false;
         long same; // my pieces
         long other; // opponent's pieces (the side we are checking for attacks from)
@@ -357,7 +459,7 @@ public class ChessBoard {
         long W = this.WP | this.WN | this.WB | this.WR | this.WQ | this.WK; // white occupancy
         long B = this.BP | this.BN | this.BB | this.BR | this.BQ | this.BK; // black occupancy
 
-        if (side == 'b'){
+        if (side == 'b') {
             otherPawns = this.BP;
             otherKnights = this.BN;
             otherBishops = this.BB;
@@ -365,8 +467,7 @@ public class ChessBoard {
             otherQueens = this.BQ;
             same = W;
             other = B;
-        }
-        else {
+        } else {
             otherPawns = this.WP;
             otherKnights = this.WN;
             otherBishops = this.WB;
@@ -377,48 +478,43 @@ public class ChessBoard {
         }
 
         /* pretend there is friendly piece on the square -
-        *  if it can capture the same piece type from black, that black piece is attacking the square
-        */
-        for (int i = 0; i < 5; i++){
-            if (i == 0){
-                if (side == 'b'){
-                if ((Move.getWhitePawnCapture(square, other) & otherPawns) != 0L){
-                    attacked = true;
-                    System.out.println("pawn");
-                    break;
-                }
-            }
-                else {
+         *  if it can capture the same piece type from black, that black piece is attacking the square
+         */
+        for (int i = 0; i < 5; i++) {
+            if (i == 0) {
+                if (side == 'b') {
+                    if ((Move.getWhitePawnCapture(square, other) & otherPawns) != 0L) {
+                        attacked = true;
+                        System.out.println("pawn");
+                        break;
+                    }
+                } else {
                     if ((Move.getBlackPawnCapture(square, same, other) & otherPawns) != 0L) {
                         attacked = true;
                         System.out.println("pawn");
                         break;
                     }
                 }
-                }
-            else if (i == 1){
-                if ((Move.getKnightMoves(square, same) & otherKnights) != 0L){
+            } else if (i == 1) {
+                if ((Move.getKnightMoves(square, same) & otherKnights) != 0L) {
                     attacked = true;
                     System.out.println("knight");
                     break;
                 }
-            }
-            else if (i == 2){
-                if ((Move.getBishopMoves(square, same, other) & otherBishops) != 0L){
+            } else if (i == 2) {
+                if ((Move.getBishopMoves(square, same, other) & otherBishops) != 0L) {
                     attacked = true;
                     System.out.println("bishop");
                     break;
                 }
-            }
-            else if (i == 3){
-                if ((Move.getRookMoves(square, same, other) & otherRooks) != 0L){
+            } else if (i == 3) {
+                if ((Move.getRookMoves(square, same, other) & otherRooks) != 0L) {
                     attacked = true;
                     System.out.println("rook");
                     break;
                 }
-            }
-            else {
-                if ((Move.getQueenMoves(square, same, other) & otherQueens) != 0L){
+            } else {
+                if ((Move.getQueenMoves(square, same, other) & otherQueens) != 0L) {
                     attacked = true;
                     System.out.println("queen");
                     break;
