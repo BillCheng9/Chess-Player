@@ -274,7 +274,7 @@ public class ChessBoard {
 
         if (!whiteToMove) {
             eval = -eval;
-        }
+        } 
 
         return eval;
     }
