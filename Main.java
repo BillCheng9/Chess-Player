@@ -14,8 +14,8 @@ public class Main {
 //        main.testAttackedByFunction();
 //        main.testMoveList();
         main.testSearchAlgorithm();
-        main.testRealGame();
-//        main.testAIvsAI(); // not working!!!
+//        main.testRealGame(6);
+        main.testAIvsAI(6, 2);
     }
     private void testKnightMoves() {
         System.out.println("\n" + "------ Test Knight moves ------" + "\n");
@@ -360,13 +360,12 @@ public class Main {
         }
     }
 
-    private void testRealGame() {
+    private void testRealGame(int cutoffDepth) {
         System.out.println("\n" + "A real game.");
 
         Scanner scanner = new Scanner(System.in);
         ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
         ChessBoard nextMove = initialBoard;
-        int cutoffDepth = 8;
         boolean whiteToMove = true;
 
         System.out.println("Current Board:");
@@ -399,31 +398,34 @@ public class Main {
         }
     }
 
-    private void testAIvsAI() {
-        System.out.println("\n" + "AI vs AI Game:");
-        Scanner scanner = new Scanner(System.in);
-        ChessBoard board = new ChessBoard("1N3r2/k1p5/6p1/P4bPP/P7/3q3p/K1P1nb2/8 w - - 0 1");
+    private void testAIvsAI(int cutoffDepthW, int cutoffDepthB) {
+        System.out.println("\nA game between two AI players.");
+
+        ChessBoard initialBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
         boolean whiteToMove = true;
 
         System.out.println("Initial Board:");
-        board.drawBoard();
+        initialBoard.drawBoard();
 
-        while (!board.isGameOver()) {
+        while (!initialBoard.isGameOver()) {
+            ChessBoard nextMove;
             if (whiteToMove) {
-                System.out.println("White's turn (AI):");
-                board = ChessAI.computeMove(board, 8, true);
+                System.out.println("\nWhite's Move:");
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepthW, true);
             } else {
-                System.out.println("Black's turn (AI):");
-                board = ChessAI.computeMove(board, 4, true);
+                System.out.println("\nBlack's Move:");
+                initialBoard.switchBoard();
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepthB, true);
+                nextMove.switchBoard();
             }
-            board.drawBoard();
 
+
+            nextMove.drawBoard();
+            initialBoard = nextMove;
             whiteToMove = !whiteToMove;
         }
 
-        scanner.close();
-
-        if (whiteToMove){
+        if (whiteToMove) {
             System.out.println("Game Over. Black wins.");
         } else {
             System.out.println("Game Over. White wins.");

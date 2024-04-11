@@ -1,7 +1,11 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class ZHashing {
     private static final long[][] zobristKeys = new long[64][13];
+    private static final long BLACK_TO_MOVE_KEY = new Random().nextLong();
+    private static final long WHITE_TO_MOVE_KEY = new Random().nextLong();
+
 
     static {
         initializeZobristKeys();
@@ -16,13 +20,14 @@ public class ZHashing {
         }
     }
 
-    public static long generateHashKey(ChessBoard board) {
+    public static long generateHashKey(ChessBoard board, boolean player) {
         long hashKey = 0;
 
         for (int i = 0; i < 64; i++) {
             int piece = getPieceHash(board, i);
             hashKey ^= zobristKeys[i][piece];
         }
+        hashKey ^= player ? WHITE_TO_MOVE_KEY : BLACK_TO_MOVE_KEY;
 
         return hashKey;
     }
