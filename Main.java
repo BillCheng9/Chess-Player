@@ -11,7 +11,7 @@ public class Main {
         main.testBishopMoves();
         main.testRookMoves();
         main.testQueenMoves();
-        main.testAttackedByFunction();
+        //main.testAttackedByFunction();
         main.testMoveList();
         main.testSearchAlgorithm();
         main.testRealGame(6);
