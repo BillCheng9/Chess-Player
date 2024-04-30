@@ -379,13 +379,13 @@ public class ChessBoard {
         // determine game phase
         if (whiteToMove) {
             Long ownMinorPieces = wb & wn;
-            if (moveCount <= 20){ // check if minor pieces are off the 1st rank
+            if (moveCount <= 20 && Long.numberOfTrailingZeros(ownMinorPieces) < 8){ // check if minor pieces are off the 1st rank
                 gamephase = 0;
             }
         }
         else {
             Long ownMinorPieces = bb & wn;
-            if (moveCount <= 20){
+            if (moveCount <= 20 && Long.numberOfLeadingZeros(ownMinorPieces) < 8){
                 gamephase = 0;
             }
         }
