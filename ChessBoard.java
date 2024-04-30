@@ -4,6 +4,50 @@ import java.util.Scanner;
 import static java.lang.Long.bitCount;
 
 public class ChessBoard {
+
+    int moveCount = 0;
+
+    private final int[] PAWN_PSQT0 = {
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 110, 110, 100, 100, 100,
+            95, 100, 100, 110, 110, 100, 100, 95,
+            95, 100, 105, 105, 105, 105, 100, 95,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+    };
+    private final int[] PAWN_PSQT = {
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+    };
+
+    private final int[] PAWN_PSQT2 = {
+            130, 130, 130, 130, 130, 130, 130, 130,
+            125, 125, 125, 125, 125, 125, 125, 125,
+            120, 120, 120, 120, 120, 120, 120, 120,
+            115, 115, 115, 115, 115, 115, 115, 115,
+            110, 110, 110, 110, 110, 110, 110, 110,
+            105, 105, 105, 105, 105, 105, 105, 105,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+    };
+    private final int[] ROOK_PSQT0 = {
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 510, 510, 505, 500, 500,
+    };
     private final int[] ROOK_PSQT = {
             500, 500, 500, 500, 500, 500, 500, 500,
             520, 520, 520, 520, 520, 520, 520, 520,
@@ -13,6 +57,28 @@ public class ChessBoard {
             500, 500, 500, 500, 500, 500, 500, 500,
             500, 500, 500, 500, 500, 500, 500, 500,
             500, 500, 500, 510, 510, 505, 500, 500,
+    };
+
+    private final int[] ROOK_PSQT2 = {
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            500, 500, 500, 500, 500, 500, 500, 500,
+            505, 505, 505, 505, 505, 505, 505, 505,
+    };
+
+    private final int[] KNIGHT_PSQT0 = {
+            290, 300, 300, 300, 300, 300, 300, 290,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 325, 300, 300, 325, 300, 300,
+            300, 300, 300, 305, 305, 300, 300, 300,
+            290, 300, 300, 300, 300, 300, 300, 290
     };
     private final int[] KNIGHT_PSQT = {
             290, 300, 300, 300, 300, 300, 300, 290,
@@ -24,6 +90,7 @@ public class ChessBoard {
             300, 305, 305, 305, 305, 305, 305, 300,
             290, 310, 300, 300, 300, 300, 310, 290
     };
+
     private final int[] KING_PSQT = {
             2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
             2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
@@ -34,6 +101,29 @@ public class ChessBoard {
             2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
             2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
     };
+
+    private final int[] KING_PSQT2 = {
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+            2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
+            2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
+            2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
+            2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020, 2000020,
+            2000010, 2000010, 2000010, 2000010, 2000010, 2000010, 2000010, 2000010,
+            2000005, 2000005, 2000005, 2000005, 2000005, 2000005, 2000005, 2000005,
+            2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000, 2000000,
+    };
+
+    private final int[] BISHOP_PSQT0 = {
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 305, 300, 300, 300, 300, 305, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+            300, 300, 325, 300, 300, 325, 300, 300,
+            300, 300, 300, 310, 310, 300, 300, 300,
+            300, 310, 300, 300, 300, 300, 310, 300,
+            300, 300, 300, 300, 300, 300, 300, 300,
+    };
+
     private final int[] BISHOP_PSQT = {
             300, 300, 300, 300, 300, 300, 300, 300,
             300, 305, 300, 300, 300, 300, 305, 300,
@@ -45,6 +135,17 @@ public class ChessBoard {
             300, 300, 300, 300, 300, 300, 300, 300,
     };
 
+    private final int[] QUEEN_PSQT0 = {
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+    };
+
     private final int[] QUEEN_PSQT = {
             900, 900, 900, 900, 900, 900, 900, 900,
             920, 920, 920, 920, 920, 920, 920, 920,
@@ -54,6 +155,17 @@ public class ChessBoard {
             900, 900, 900, 900, 900, 900, 900, 900,
             900, 900, 900, 910, 910, 900, 900, 900,
             900, 900, 900, 910, 910, 900, 900, 900,
+    };
+
+    private final int[] QUEEN_PSQT2 = {
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+            900, 900, 910, 925, 925, 910, 900, 900,
+            900, 900, 910, 925, 925, 910, 900, 900,
+            900, 900, 910, 910, 910, 910, 900, 900,
+            900, 900, 900, 910, 910, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900,
     };
 
     private long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
@@ -238,70 +350,134 @@ public class ChessBoard {
      */
     public int evaluateWhite(boolean whiteToMove) {
         int eval = 0;
+        int gamephase = 1; // 0 for opening, 1 for midgame, 2 for endgame
 
         Long bb = this.BB;
         Long bn = this.BN;
         Long br = this.BR;
         Long bq = this.BQ;
         Long bk = this.BK;
+        Long bp = this.BP;
 
         Long wb = this.WB;
         Long wn = this.WN;
         Long wr = this.WR;
         Long wq = this.WQ;
         Long wk = this.WK;
+        Long wp = this.WP;
+
+        Long wpieces = wb & wn & wr & wq;
+        Long bpieces = bb & bn & br & bq;
+
+        int [] bPsqt; // define piece square table variables
+        int [] nPsqt;
+        int [] rPsqt;
+        int [] qPsqt;
+        int [] kPsqt;
+        int [] pPsqt;
+
+        // determine game phase
+        if (whiteToMove) {
+            Long ownMinorPieces = wb & wn;
+            if (moveCount <= 20){ // check if minor pieces are off the 1st rank
+                gamephase = 0;
+            }
+        }
+        else {
+            Long ownMinorPieces = bb & wn;
+            if (moveCount <= 20){
+                gamephase = 0;
+            }
+        }
+
+        if (Long.bitCount(bpieces) < 3 && Long.bitCount(wpieces) < 3){ // endgame if both players only have two pieces left
+            gamephase = 2;
+        }
+
+        // use the set of piece square tables that corresponds to the current game phase
+        if (gamephase == 0){
+            bPsqt = BISHOP_PSQT0;
+            nPsqt = KNIGHT_PSQT0;
+            rPsqt = ROOK_PSQT0;
+            kPsqt = KING_PSQT;
+            qPsqt = QUEEN_PSQT0;
+            pPsqt = PAWN_PSQT0;
+        }
+        else if (gamephase == 1){
+            bPsqt = BISHOP_PSQT;
+            nPsqt = KNIGHT_PSQT;
+            rPsqt = ROOK_PSQT;
+            kPsqt = KING_PSQT;
+            qPsqt = QUEEN_PSQT;
+            pPsqt = PAWN_PSQT;
+        }
+        else {
+            bPsqt = BISHOP_PSQT;
+            nPsqt = KNIGHT_PSQT;
+            rPsqt = ROOK_PSQT2;
+            kPsqt = KING_PSQT2;
+            qPsqt = QUEEN_PSQT2;
+            pPsqt = PAWN_PSQT2;
+        }
 
         // calculate own material
         // look up the material value of each piece based on the piece square table, then add it to the total
         while (wb != 0) { // while there are still white bishops on the board
-            eval += BISHOP_PSQT[Long.numberOfLeadingZeros(wb)]; // use number of leading zeros to index into psqt
+            eval += bPsqt[Long.numberOfLeadingZeros(wb)]; // use number of leading zeros to index into psqt
             wb = wb & (~Long.highestOneBit(wb)); // take one bishop off the board
         }
         while (wn != 0) {
-            eval += KNIGHT_PSQT[Long.numberOfLeadingZeros(wn)];
+            eval += nPsqt[Long.numberOfLeadingZeros(wn)];
             wn = wn & (~Long.highestOneBit(wn));
         }
         while (wr != 0) {
-            eval += ROOK_PSQT[Long.numberOfLeadingZeros(wr)];
+            eval += rPsqt[Long.numberOfLeadingZeros(wr)];
             wr = wr & (~Long.highestOneBit(wr));
         }
         while (wq != 0) {
-            eval += QUEEN_PSQT[Long.numberOfLeadingZeros(wq)];
+            eval += qPsqt[Long.numberOfLeadingZeros(wq)];
             wq = wq & (~Long.highestOneBit(wq));
         }
         while (wk != 0) {
-            eval += KING_PSQT[Long.numberOfLeadingZeros(wk)];
+            eval += kPsqt[Long.numberOfLeadingZeros(wk)];
             wk = wk & (~Long.highestOneBit(wk));
         }
-        eval += bitCount(this.WP) * 100;
+        while (wp != 0) {
+            eval += pPsqt[Long.numberOfLeadingZeros(wp)];
+            wp = wp & (~Long.highestOneBit(wp));
+        }
 
         // calculate opponent material, subtract it from eval
         while (bb != 0) {
             Long piece = Long.highestOneBit(bb); // isolate one piece first
-            eval -= BISHOP_PSQT[Long.numberOfTrailingZeros(bb)]; // use trailing zeros to flip the psqt to black's pov
+            eval -= bPsqt[Long.numberOfTrailingZeros(bb)]; // use trailing zeros to flip the psqt to black's pov
             bb = bb & (~piece); // take the piece off
         }
         while (bn != 0) {
             Long piece = Long.highestOneBit(bn);
-            eval -= KNIGHT_PSQT[Long.numberOfTrailingZeros(piece)];
+            eval -= nPsqt[Long.numberOfTrailingZeros(piece)];
             bn = bn & (~piece);
         }
         while (br != 0) {
             Long piece = Long.highestOneBit(br);
-            eval -= ROOK_PSQT[Long.numberOfTrailingZeros(br)];
+            eval -= rPsqt[Long.numberOfTrailingZeros(br)];
             br = br & (~piece);
         }
         while (bq != 0) {
             Long piece = Long.highestOneBit(bq);
-            eval -= QUEEN_PSQT[Long.numberOfTrailingZeros(bq)];
+            eval -= qPsqt[Long.numberOfTrailingZeros(bq)];
             bq = bq & (~piece);
         }
         while (bk != 0) {
             Long piece = Long.highestOneBit(bk);
-            eval -= KING_PSQT[Long.numberOfTrailingZeros(bk)];
+            eval -= kPsqt[Long.numberOfTrailingZeros(bk)];
             bk = bk & (~piece);
         }
-        eval -= bitCount(this.BP) * 100;
+        while (bp != 0) {
+            Long piece = Long.highestOneBit(bp);
+            eval -= kPsqt[Long.numberOfTrailingZeros(bp)];
+            bp = bp & (~piece);
+        }
 
         if (!whiteToMove) {
             eval = -eval;
@@ -438,6 +614,8 @@ public class ChessBoard {
 
         // create the board after the move
         userBoard = new ChessBoard(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+
+        this.moveCount += 1;
 
         return userBoard;
     }
