@@ -13,9 +13,10 @@ public class Main {
 //        main.testQueenMoves();
 //        main.testAttackedByFunction();
 //        main.testMoveList();
-        main.testSearchAlgorithm();
+//        main.testSearchAlgorithm();
 //        main.testRealGame(6);
-        main.testAIvsAI(6, 2);
+        main.testPromotion(6);
+//        main.testAIvsAI(6, 2);
     }
     private void testKnightMoves() {
         System.out.println("\n" + "------ Test Knight moves ------" + "\n");
@@ -211,6 +212,42 @@ public class Main {
         System.out.println("White queen moves");
         long WQm = Move.getQueenMoves(QWQ, wQTest, bQTest);
         ChessBoard.drawArray(WQm);
+    }
+
+    private void testPromotion(int cutoffDepth){
+        Scanner scanner = new Scanner(System.in);
+        ChessBoard initialBoard = new ChessBoard("1k1n4/4P3/8/8/8/8/8/3K4 w KQkq - 0 1"); // starting position
+        ChessBoard nextMove = initialBoard;
+        boolean whiteToMove = true;
+
+        System.out.println("Current Board:");
+        initialBoard.drawBoard();
+
+        while (!nextMove.isGameOver()) {
+            if (whiteToMove) {
+                nextMove = ChessAI.computeMove(initialBoard, cutoffDepth, true);
+            } else {
+                nextMove = initialBoard.checkMove();
+                if (nextMove == null){
+                    break;
+                }
+            }
+
+            System.out.println("\n Move:");
+            nextMove.drawBoard();
+
+            initialBoard = nextMove;
+
+            whiteToMove = !whiteToMove;
+        }
+
+        scanner.close();
+
+        if (whiteToMove){
+            System.out.println("Game Over. Black wins.");
+        } else {
+            System.out.println("Game Over. White wins.");
+        }
     }
 
     private void testAttackedByFunction() {
