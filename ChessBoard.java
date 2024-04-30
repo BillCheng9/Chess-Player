@@ -479,6 +479,13 @@ public class ChessBoard {
             bp = bp & (~piece);
         }
 
+        // Calculate mobility
+        int whiteMobility = calculateMobility(true);
+        int blackMobility = calculateMobility(false);
+
+        // Include mobility in evaluation
+        eval += (whiteMobility - blackMobility) * 10;
+
         if (!whiteToMove) {
             eval = -eval;
         } 
@@ -489,7 +496,7 @@ public class ChessBoard {
     /***
      * check to see if the game is over
      * For now, implemented as a check to see if the king is captured (which is not a legal event in chess)
-     * Later, we will implement this method to check if one side has been checkmated 
+     * Later, we will implement this method to check if one side has been checkmated
      * @return true if the king is gone; false if it is not
      */
     public boolean isGameOver() {
@@ -700,5 +707,52 @@ public class ChessBoard {
             }
         }
         return attacked;
+    }
+
+    public void switchBoard() {
+        long temp;
+
+        // Swap white and black pieces
+        temp = WP; WP = BP; BP = temp;
+        temp = WN; WN = BN; BN = temp;
+        temp = WB; WB = BB; BB = temp;
+        temp = WR; WR = BR; BR = temp;
+        temp = WQ; WQ = BQ; BQ = temp;
+        temp = WK; WK = BK; BK = temp;
+
+        // Flip the positions of the pieces
+        WP = Long.reverse(WP);
+        WN = Long.reverse(WN);
+        WB = Long.reverse(WB);
+        WR = Long.reverse(WR);
+        WQ = Long.reverse(WQ);
+        WK = Long.reverse(WK);
+
+        BP = Long.reverse(BP);
+        BN = Long.reverse(BN);
+        BB = Long.reverse(BB);
+        BR = Long.reverse(BR);
+        BQ = Long.reverse(BQ);
+        BK = Long.reverse(BK);
+    }
+
+    private int calculateMobility(boolean isWhite) {
+        int mobility = 0;
+
+        // Get all the bitboards for the player's pieces
+        long myPawns = isWhite ? WP : BP;
+        long myKnights = isWhite ? WN : BN;
+        long myBishops = isWhite ? WB : BB;
+        long myRooks = isWhite ? WR : BR;
+        long sameOccupied = isWhite ? (WP | WN | WB | WR | WQ | WK) : (BP | BN | BB | BR | BQ | BK);
+        long otherOccupied = isWhite ? (BP | BN | BB | BR | BQ | BK) : (WP | WN | WB | WR | WQ | WK);
+
+        // Calculate mobility for each piece
+        mobility += Long.bitCount(Move.getWhitePawnMoves(myPawns, sameOccupied, otherOccupied));
+        mobility += Long.bitCount(Move.getKnightMoves(myKnights, sameOccupied))  * 1.5;
+        mobility += Long.bitCount(Move.getBishopMoves(myBishops, sameOccupied, otherOccupied)) * 2;
+        mobility += Long.bitCount(Move.getRookMoves(myRooks, sameOccupied, otherOccupied));
+
+        return mobility;
     }
 }

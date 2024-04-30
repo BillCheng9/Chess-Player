@@ -50,7 +50,7 @@ public class ChessAI {
      */
     private static int computeMax(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
         // Check if the board position is already evaluated
-        Long hash = ZHashing.generateHashKey(board);
+        Long hash = ZHashing.generateHashKey(board, player);
         if (transpositionTable.containsKey(hash)) {
             return transpositionTable.get(hash);
         }
@@ -91,7 +91,7 @@ public class ChessAI {
      */
     private static int computeMin(ChessBoard board, int currDepth, int alpha, int beta, int cutoffDepth, boolean player) {
         // Check if the board position is already evaluated
-        Long hash = ZHashing.generateHashKey(board);
+        Long hash = ZHashing.generateHashKey(board, player);
         if (transpositionTable.containsKey(hash)) {
             return transpositionTable.get(hash);
         }
