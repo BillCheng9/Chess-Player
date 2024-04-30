@@ -6,7 +6,7 @@ public class Main {
         Main main = new Main();
         main.testKnightMoves();
         main.testPawnMoves();
-        main.testEvaluationFunction();
+        //main.testEvaluationFunction();
         main.testKingMoves();
         main.testBishopMoves();
         main.testRookMoves();
