@@ -343,6 +343,10 @@ public class ChessBoard {
             if (userMove.equals("forfeit")) {
                 break;
             }
+            if (userMove.length() != 4){
+                System.out.println("Invalid Format");
+                continue;
+            }
             // get the starting and ending square
             int startFile = 9 - userMove.charAt(0) - 'a';
             int startRank = Character.getNumericValue(userMove.charAt(1)) - 1;
@@ -353,7 +357,6 @@ public class ChessBoard {
 
             long playerPieces = BP | BR | BB | BK | BN | BQ;
             long computerPieces = WP | WR | WB | WK | WN | WQ;
-
             if (userMove.charAt(0) > 'h' || userMove.charAt(0) < 'a'
                     || userMove.charAt(1) > '8' || userMove.charAt(1) < '0'
                     || userMove.charAt(2) > 'h' || userMove.charAt(2) < 'a'

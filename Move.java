@@ -515,7 +515,12 @@ public class Move {
                             }
                         }
                     }
-                    ownPawns = ownPawns & (~pawn) | move;
+                    // Check promotion
+                    if(((move & RankMasks[7]) | move & RankMasks[0]) != 0L){
+                        ownQueens = ownQueens | move;
+                        ownPawns = ownPawns & (~pawn);
+                    }
+                    else{ownPawns = ownPawns & (~pawn) | move;}
                     allMoves.add(new ChessBoard(ownPawns, ownKnights, ownBishops, ownRooks, ownQueens, ownKing, opponentPawns, opponentKnights, opponentBishops, opponentRooks, opponentQueens, opponentKing));
                     ownPawns = initialOwnPawns;
                     opponentPawns = chessBoard.getBP();
