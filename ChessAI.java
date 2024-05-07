@@ -33,7 +33,7 @@ public class ChessAI {
         Long hash = ZHashing.generateHashKey(board, player);
         if (transpositionTable.containsKey(hash)) {
             TranspositionEntry entry = transpositionTable.get(hash);
-            if (entry.depth >= currDepth) {
+            if (entry.depth <= currDepth) {
                 return entry.eval;
             }
         }
@@ -62,7 +62,7 @@ public class ChessAI {
         Long hash = ZHashing.generateHashKey(board, player);
         if (transpositionTable.containsKey(hash)) {
             TranspositionEntry entry = transpositionTable.get(hash);
-            if (entry.depth >= currDepth) {
+            if (entry.depth <= currDepth) {
                 return entry.eval;
             }
         }
